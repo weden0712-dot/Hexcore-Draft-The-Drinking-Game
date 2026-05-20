@@ -1162,6 +1162,14 @@ function showPenaltyScreen(targetId, message) {
   els.penaltyOverlay.classList.remove("hidden");
 }
 
+function bindPenaltyAck() {
+  if (els.penaltyAckBtn) {
+    els.penaltyAckBtn.addEventListener("click", () => {
+      els.penaltyOverlay.classList.add("hidden");
+    });
+  }
+}
+
 function showResolution(text) {
   if (els.resolutionOverlay) { els.resolutionText.textContent = text; els.resolutionOverlay.classList.remove("hidden"); setTimeout(() => { els.resolutionOverlay.classList.add("hidden"); }, 6000); }
 }
