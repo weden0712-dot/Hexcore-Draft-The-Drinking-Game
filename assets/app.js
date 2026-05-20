@@ -1192,8 +1192,9 @@ function render() {
 
 function renderHome() {
   const inRoom = Boolean(session.roomCode);
-  els.stageLobby.hidden = inRoom;
-  els.stageLobbyRoom.hidden = !inRoom || session.room?.phase === "playing";
+  const roomLoaded = Boolean(session.room);
+  els.stageLobby.hidden = inRoom && roomLoaded;
+  els.stageLobbyRoom.hidden = !inRoom || !roomLoaded || session.room.phase === "playing";
   els.stageGameplay.hidden = !inRoom || session.room?.phase !== "playing" || !state.started;
   els.stageLibrary.hidden = true;
 
