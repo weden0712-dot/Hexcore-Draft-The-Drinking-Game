@@ -1262,8 +1262,8 @@ function renderGame() {
   els.turnPermissionHint.textContent = inCountdown ? `⚡ 插播 ${Math.max(0, Math.ceil((state.countdownEndsAt - Date.now()) / 1000))}s` : (canAct ? "轮到你行动" : `等待 ${player.name}`);
 
   els.currentPlayerName.textContent = player.name;
-  els.handTitle.textContent = canAct ? `${viewer.name} 的手牌${hasActed ? "（已行动）" : ""}` : `你的手牌（等待 ${player.name}）`;
-  els.handLimitLabel.textContent = `上限 ${handLimit()}`;
+  if (els.handTitle) els.handTitle.textContent = canAct ? `${viewer.name} 的手牌${hasActed ? "（已行动）" : ""}` : `你的手牌（等待 ${player.name}）`;
+  if (els.handLimitLabel) els.handLimitLabel.textContent = `上限 ${handLimit()}`;
 
   [els.targetSelect, els.ddBtn, els.shuffleDiscardBtn].forEach((c) => { c.disabled = !canAct || inCountdown || isEventChoose || hasActed; });
   if (els.eventBtn) els.eventBtn.disabled = !canAct || inCountdown || isEventChoose || hasActed;
