@@ -1285,13 +1285,13 @@ function renderGame() {
   const inCountdown = isInCountdown();
   const isEventChoose = state.phase === "eventChoose";
 
-  els.roundStat.textContent = `R${state.round}`;
-  els.deckStat.textContent = String(state.deck.length);
-  els.discardStat.textContent = String(state.discard.length);
+  if (els.roundStat) els.roundStat.textContent = `R${state.round}`;
+  if (els.deckStat) els.deckStat.textContent = String(state.deck.length);
+  if (els.discardStat) els.discardStat.textContent = String(state.discard.length);
 
-  els.turnPermissionHint.textContent = inCountdown ? `⚡ 插播 ${Math.max(0, Math.ceil((state.countdownEndsAt - Date.now()) / 1000))}s` : (canAct ? "轮到你行动" : `等待 ${player.name}`);
+  if (els.turnPermissionHint) els.turnPermissionHint.textContent = inCountdown ? `⚡ 插播 ${Math.max(0, Math.ceil((state.countdownEndsAt - Date.now()) / 1000))}s` : (canAct ? "轮到你行动" : `等待 ${player.name}`);
 
-  els.currentPlayerName.textContent = player.name;
+  if (els.currentPlayerName) els.currentPlayerName.textContent = player.name;
   if (els.handTitle) els.handTitle.textContent = canAct ? `${viewer.name} 的手牌${hasActed ? "（已行动）" : ""}` : `你的手牌（等待 ${player.name}）`;
   if (els.handLimitLabel) els.handLimitLabel.textContent = `上限 ${handLimit()}`;
 
