@@ -483,13 +483,6 @@ function resetSessionToHome() {
   render();
 }
 
-function resetSessionToHome() {
-  if (session.unsubscribe) session.unsubscribe();
-  session = { ...session, roomCode: "", room: null, isHost: false, unsubscribe: null, busy: false };
-  state = createEmptyState();
-  render();
-}
-
 async function saveRoomSettings() {
   if (!ensureHost()) return;
   try {
