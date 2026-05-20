@@ -508,8 +508,6 @@ function drawForCurrent(reason = "摸牌") {
   commitGame();
 }
 
-let countdownInterval = null;
-
 function triggerEvent() {
   if (!ensureActor()) return;
   const actor = currentPlayer();
