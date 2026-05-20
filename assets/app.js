@@ -78,9 +78,10 @@ const HEX_CHOICES_POOL = [
 ];
 
 const els = {
-  homePanel: document.querySelector("#homePanel"),
-  lobbyPanel: document.querySelector("#lobbyPanel"),
-  gamePanel: document.querySelector("#gamePanel"),
+  stageLobby: document.querySelector("#stage-lobby"),
+  stageLobbyRoom: document.querySelector("#stage-lobby-room"),
+  stageGameplay: document.querySelector("#stage-gameplay"),
+  stageLibrary: document.querySelector("#stage-library"),
   connectionStatus: document.querySelector("#connectionStatus"),
   serviceWarning: document.querySelector("#serviceWarning"),
   menuChoices: document.querySelector("#menuChoices"),
@@ -102,7 +103,6 @@ const els = {
   copyRoomBtn: document.querySelector("#copyRoomBtn"),
   leaveRoomBtn: document.querySelector("#leaveRoomBtn"),
   lobbyPlayers: document.querySelector("#lobbyPlayers"),
-  playerCount: document.querySelector("#playerCount"),
   roomNameInput: document.querySelector("#roomNameInput"),
   roomPasswordInput: document.querySelector("#roomPasswordInput"),
   clearPasswordInput: document.querySelector("#clearPasswordInput"),
@@ -133,10 +133,8 @@ const els = {
   shuffleDiscardBtn: document.querySelector("#shuffleDiscardBtn"),
   toggleLibraryBtn: document.querySelector("#toggleLibraryBtn"),
   eventBtn: document.querySelector("#eventBtn"),
-  confirmEventBtn: document.querySelector("#confirmEventBtn"),
-  libraryPanel: document.querySelector("#libraryPanel"),
-  libraryGrid: document.querySelector("#libraryGrid"),
   closeLibraryBtn: document.querySelector("#closeLibraryBtn"),
+  libraryGrid: document.querySelector("#libraryGrid"),
   toast: document.querySelector("#toast"),
   countdownOverlay: document.querySelector("#countdownOverlay"),
   countdownTimer: document.querySelector("#countdownTimer"),
@@ -171,7 +169,12 @@ els.nicknameInput.value = profile.name;
 bindEvents();
 render();
 initRealtime();
-init3DTilt();
+
+setTimeout(() => {
+  if (window.VanillaTilt) {
+    VanillaTilt.init(document.querySelectorAll(".ar-card"), { max: 18, speed: 400, glare: true, "max-glare": 0.3, gyroscope: true });
+  }
+}, 500);
 
 async function initRealtime() {
   try {
@@ -189,19 +192,6 @@ async function initRealtime() {
     els.connectionStatus.textContent = "连接失败";
   }
   render();
-}
-
-function init3DTilt() {
-  const cards = document.querySelectorAll(".hex-card");
-  if (window.DeviceOrientationEvent) {
-    window.addEventListener("deviceorientation", (e) => {
-      const tiltX = e.gamma / 20;
-      const tiltY = e.beta / 20;
-      cards.forEach((card) => {
-        card.style.transform = `perspective(1000px) rotateY(${tiltX}deg) rotateX(${-tiltY}deg)`;
-      });
-    });
-  }
 }
 
 function createEmptyState() {
@@ -1204,13 +1194,18 @@ function render() {
 
 function renderHome() {
   const inRoom = Boolean(session.roomCode);
-  els.homePanel.hidden = inRoom;
-  els.lobbyPanel.hidden = !inRoom || session.room?.phase === "playing";
-  els.gamePanel.hidden = !inRoom || session.room?.phase !== "playing" || !state.started;
-  els.libraryPanel.hidden = true;
+  els.stageLobby.hidden = inRoom;
+  els.stageLobbyRoom.hidden = !inRoom || session.room?.phase === "playing";
+  els.stageGameplay.hidden = !inRoom || session.room?.phase !== "playing" || !state.started;
+  els.stageLibrary.hidden = true;
 
-  if (realtime.configured) { els.connectionStatus.textContent = "联机服务已连接"; els.connectionStatus.classList.add("ready"); }
-  else { els.connectionStatus.textContent = "离线模式"; els.connectionStatus.classList.remove("ready"); }
+  if (realtime.configured) {
+    els.connectionStatus.innerHTML = `<span class="w-1 h-1 rounded-full bg-emerald-400"></span> 联机服务已连接`;
+    els.connectionStatus.classList.add("text-emerald-400");
+  } else {
+    els.connectionStatus.innerHTML = `<span class="w-1 h-1 rounded-full bg-slate-500"></span> 离线模式`;
+    els.connectionStatus.classList.remove("text-emerald-400");
+  }
   if (els.createRoomBtn) els.createRoomBtn.disabled = !realtime.configured || session.busy;
   if (els.joinRoomBtn) els.joinRoomBtn.disabled = !realtime.configured || session.busy;
   els.menuCreateBtn.disabled = session.busy;
@@ -1233,9 +1228,8 @@ function renderLobby() {
 
   els.lobbyRoomTitle.textContent = settings.roomName;
   els.lobbyRoomCode.textContent = room.code;
-  if (els.playerCount) els.playerCount.textContent = players.length;
 
-  els.lobbyPlayers.innerHTML = players.map((p) => `<div class="lobby-player ${p.online === false ? "offline" : ""}"><span class="seat-avatar">${escapeHtml(p.name.slice(0, 1))}</span><strong>${escapeHtml(p.name)}${p.id === session.clientId ? "（我）" : ""}</strong><span>${p.id === room.hostId ? "房主" : `座位 ${p.seat + 1}`} · ${p.online === false ? "离线" : "在线"}</span></div>`).join("");
+  els.lobbyPlayers.innerHTML = players.map((p) => `<div class="lobby-player ${p.online === false ? "offline" : ""}"><span class="seat-avatar">${escapeHtml(p.name.slice(0, 1))}</span><strong class="text-xs font-bold text-slate-200">${escapeHtml(p.name)}${p.id === session.clientId ? "（我）" : ""}</strong><span class="text-[8px] text-slate-500">${p.id === room.hostId ? "房主" : `座位 ${p.seat + 1}`} · ${p.online === false ? "离线" : "在线"}</span></div>`).join("");
 
   els.roomNameInput.value = settings.roomName;
   els.initialHandInput.value = settings.initialHand;
@@ -1379,8 +1373,8 @@ function bindEvents() {
   if (els.eventBtn) els.eventBtn.addEventListener("click", triggerEvent);
   if (els.confirmEventBtn) els.confirmEventBtn.addEventListener("click", confirmEventTarget);
 
-  els.toggleLibraryBtn.addEventListener("click", () => { els.libraryPanel.hidden = false; });
-  if (els.closeLibraryBtn) els.closeLibraryBtn.addEventListener("click", () => { els.libraryPanel.hidden = true; });
+  els.toggleLibraryBtn.addEventListener("click", () => { els.stageLibrary.hidden = false; });
+  if (els.closeLibraryBtn) els.closeLibraryBtn.addEventListener("click", () => { els.stageLibrary.hidden = true; });
 
   els.handCards.addEventListener("click", (e) => { const uid = e.target.closest("[data-use-card]")?.dataset.useCard; if (uid) useCard(uid); });
   els.activeList.addEventListener("click", (e) => { const payload = e.target.closest("[data-remove-active]")?.dataset.removeActive; if (!payload) return; const [pid, uid] = payload.split(":"); removeActiveCard(pid, uid); });

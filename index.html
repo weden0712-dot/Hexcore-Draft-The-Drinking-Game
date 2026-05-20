@@ -1,261 +1,244 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh-CN">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-    <meta name="theme-color" content="#050510" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#02040a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>喝酒之弈 | HEXCORE</title>
-    <link rel="icon" href="./assets/card-back.svg" />
-    <link rel="stylesheet" href="./assets/styles.css" />
-  </head>
-  <body>
-    <div class="ar-background">
-      <div class="grid-floor"></div>
-      <div class="scan-line"></div>
-      <div class="particles" id="particles"></div>
+    <link rel="icon" href="./assets/card-back.svg">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
+    <link rel="stylesheet" href="./assets/styles.css">
+</head>
+<body class="min-h-screen flex items-center justify-center p-2 text-slate-100 select-none overflow-hidden">
+
+    <div class="ambient-glow bg-purple-600 top-[-50px] left-[-50px]"></div>
+    <div class="ambient-glow bg-cyan-600 bottom-[-50px] right-[-50px]" style="animation-delay: -4s;"></div>
+
+    <div id="viewport" class="w-full max-w-md h-[96vh] max-h-[850px] glass-panel rounded-3xl border border-white/10 flex flex-col justify-between relative z-10 shadow-2xl overflow-hidden">
+
+        <!-- ==================== LOBBY ==================== -->
+        <div id="stage-lobby" class="flex-1 flex flex-col justify-between p-5">
+            <div class="text-center mt-4">
+                <span class="inline-flex items-center gap-1 px-3 py-1 bg-purple-500/10 border border-purple-500/30 rounded-full text-[9px] text-purple-300 tracking-widest uppercase font-black mb-3">
+                    <i class="fa-solid fa-fire text-amber-400"></i> Cyber-Drink Tactics
+                </span>
+                <h1 class="text-3xl font-black tracking-wider bg-gradient-to-r from-amber-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent italic uppercase">
+                    HEXCORE
+                </h1>
+                <p class="text-xs text-slate-400 tracking-widest mt-1 uppercase font-semibold">喝酒之弈 • 终极连线</p>
+            </div>
+
+            <div class="my-auto py-4 flex flex-col items-center">
+                <div class="ar-card w-36 h-48 rounded-2xl p-4 flex flex-col justify-between border border-cyan-500/30 shadow-lg relative"
+                     data-tilt data-tilt-max="20" data-tilt-glare data-tilt-max-glare="0.3" style="--glow-color: rgba(6, 182, 212, 0.2);">
+                    <div class="flex justify-between items-center parallax-layer">
+                        <span class="text-[8px] bg-cyan-500/20 text-cyan-300 font-bold px-1.5 py-0.5 rounded border border-cyan-500/30">V2.0 LIVE</span>
+                        <i class="fa-solid fa-gamepad text-cyan-400 text-xs animate-pulse"></i>
+                    </div>
+                    <div class="text-center parallax-layer">
+                        <div class="w-9 h-9 rounded-full bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center mx-auto mb-2 text-cyan-400 shadow-[0_0_10px_rgba(6,182,212,0.1)]">
+                            <i class="fa-solid fa-wine-glass-sad"></i>
+                        </div>
+                        <h3 class="text-xs font-black text-slate-200">海克斯酒桌卡牌</h3>
+                        <p class="text-[8px] text-slate-400 mt-1">68 张牌 · 实时联机</p>
+                    </div>
+                    <div class="text-center text-[8px] text-slate-500 font-mono parallax-layer">MULTIPLAYER</div>
+                </div>
+            </div>
+
+            <div class="space-y-3 mb-2">
+                <div id="menuChoices" class="grid grid-cols-2 gap-3">
+                    <button id="menuCreateBtn" class="py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-black rounded-xl shadow-lg transition-all transform active:scale-95 flex items-center justify-center gap-2 border border-purple-400/20 cursor-pointer">
+                        <i class="fa-solid fa-plus"></i>
+                        <span class="tracking-widest text-sm">创建房间</span>
+                    </button>
+                    <button id="menuJoinBtn" class="py-3 bg-slate-900/80 border border-white/10 text-slate-200 font-black rounded-xl transition-all transform active:scale-95 flex items-center justify-center gap-2 cursor-pointer">
+                        <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                        <span class="tracking-widest text-sm">加入房间</span>
+                    </button>
+                </div>
+
+                <div id="homeFormPanel" class="hidden space-y-2">
+                    <div class="flex justify-between items-center mb-1">
+                        <h3 id="homeModeTitle" class="text-sm font-black text-slate-200">创建房间</h3>
+                        <button id="backMenuBtn" class="px-2 py-1 bg-slate-900/80 border border-white/10 text-slate-400 rounded-lg text-xs cursor-pointer"><i class="fa-solid fa-arrow-left mr-1"></i>返回</button>
+                    </div>
+
+                    <input id="nicknameInput" type="text" maxlength="10" placeholder="输入你的酒局大名" class="w-full bg-slate-950/80 border border-white/10 rounded-xl py-2.5 px-4 text-center text-sm font-bold text-white focus:outline-none focus:border-purple-500 transition-colors">
+
+                    <div id="createFields" class="space-y-2">
+                        <input id="createPasswordInput" type="text" maxlength="18" placeholder="房间密码（可选）" class="w-full bg-slate-950/80 border border-white/10 rounded-xl py-2.5 px-4 text-center text-sm text-white focus:outline-none focus:border-purple-500 transition-colors">
+                        <button id="createRoomBtn" class="w-full py-3 bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 text-white font-black rounded-xl shadow-lg transition-all transform active:scale-95 border border-purple-400/20 cursor-pointer">
+                            确认创建
+                        </button>
+                    </div>
+
+                    <div id="joinFields" class="hidden space-y-2">
+                        <input id="joinCodeInput" type="text" maxlength="6" placeholder="6 位数字房号" inputmode="numeric" class="w-full bg-slate-950/80 border border-white/10 rounded-xl py-2.5 px-4 text-center text-sm text-white focus:outline-none focus:border-purple-500 transition-colors">
+                        <input id="joinPasswordInput" type="text" maxlength="18" placeholder="房间密码（无密码留空）" class="w-full bg-slate-950/80 border border-white/10 rounded-xl py-2.5 px-4 text-center text-sm text-white focus:outline-none focus:border-purple-500 transition-colors">
+                        <button id="joinRoomBtn" class="w-full py-3 bg-slate-800 border border-white/10 text-slate-200 font-black rounded-xl transition-all transform active:scale-95 cursor-pointer">
+                            确认加入
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <span id="connectionStatus" class="inline-flex items-center gap-1 px-2 py-0.5 bg-slate-900/50 border border-white/5 rounded-full text-[8px] text-slate-500 tracking-wider uppercase">
+                    <span class="w-1 h-1 rounded-full bg-slate-500"></span> 正在连接...
+                </span>
+                <div id="serviceWarning" class="text-[8px] text-amber-500/60 mt-1"></div>
+            </div>
+        </div>
+
+        <!-- ==================== LOBBY ROOM ==================== -->
+        <div id="stage-lobby-room" class="hidden flex-1 flex flex-col p-4 overflow-y-auto">
+            <div class="bg-slate-950/70 rounded-2xl p-3 border border-white/5 flex justify-between items-center mb-3">
+                <div>
+                    <span class="text-[8px] uppercase tracking-widest text-cyan-400 font-black bg-cyan-500/10 border border-cyan-400/20 px-1.5 py-0.5 rounded">ROOM</span>
+                    <h3 id="lobbyRoomTitle" class="text-xs font-black mt-1">喝酒之弈</h3>
+                    <span id="lobbyRoomCode" class="text-[9px] font-mono text-cyan-400">------</span>
+                </div>
+                <div class="flex gap-2">
+                    <button id="copyRoomBtn" class="px-2 py-1 bg-slate-900/80 border border-white/10 text-slate-400 rounded-lg text-xs cursor-pointer"><i class="fa-regular fa-copy"></i></button>
+                    <button id="leaveRoomBtn" class="px-2 py-1 bg-red-900/30 border border-red-500/20 text-red-400 rounded-lg text-xs cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <h4 class="text-[9px] uppercase tracking-widest text-slate-500 font-black mb-2">在线玩家</h4>
+                <div id="lobbyPlayers" class="flex gap-2 overflow-x-auto pb-2"></div>
+            </div>
+
+            <div class="bg-slate-950/50 rounded-2xl p-3 border border-white/5 mb-3">
+                <h4 class="text-[9px] uppercase tracking-widest text-slate-500 font-black mb-2">房间设置</h4>
+                <div class="grid grid-cols-2 gap-2 mb-2">
+                    <input id="roomNameInput" maxlength="14" placeholder="房间名" class="bg-slate-900/80 border border-white/10 rounded-lg py-2 px-3 text-xs text-white focus:outline-none focus:border-purple-500">
+                    <input id="roomPasswordInput" maxlength="18" placeholder="密码" class="bg-slate-900/80 border border-white/10 rounded-lg py-2 px-3 text-xs text-white focus:outline-none focus:border-purple-500">
+                    <input id="initialHandInput" min="1" max="5" type="number" placeholder="初始手牌" class="bg-slate-900/80 border border-white/10 rounded-lg py-2 px-3 text-xs text-white focus:outline-none focus:border-purple-500">
+                    <input id="handLimitInput" min="3" max="8" type="number" placeholder="手牌上限" class="bg-slate-900/80 border border-white/10 rounded-lg py-2 px-3 text-xs text-white focus:outline-none focus:border-purple-500">
+                    <input id="maxDrinksInput" min="1" max="10" type="number" placeholder="初始血量" class="bg-slate-900/80 border border-white/10 rounded-lg py-2 px-3 text-xs text-white focus:outline-none focus:border-purple-500">
+                    <label class="flex items-center gap-1 text-[8px] text-slate-400"><input id="clearPasswordInput" type="checkbox" class="accent-purple-500"> 清除密码</label>
+                </div>
+                <div class="flex gap-2">
+                    <button id="saveSettingsBtn" class="flex-1 py-2 bg-slate-900/80 border border-white/10 text-slate-400 rounded-lg text-xs font-bold cursor-pointer">保存</button>
+                    <button id="startRoomGameBtn" class="flex-1 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-lg text-xs font-black cursor-pointer">开始游戏</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== GAMEPLAY ==================== -->
+        <div id="stage-gameplay" class="hidden flex-1 flex flex-col p-3 relative overflow-hidden">
+
+            <div class="bg-slate-950/70 rounded-2xl p-2.5 border border-white/5 flex justify-between items-center z-20 shadow-xl mb-2">
+                <div class="flex items-center gap-2">
+                    <span id="roundStat" class="text-[8px] uppercase tracking-widest text-cyan-400 font-black bg-cyan-500/10 border border-cyan-400/20 px-1.5 py-0.5 rounded">R1</span>
+                    <span id="deckStat" class="text-[9px] font-mono bg-slate-900 px-2 py-1 rounded border border-white/5 text-slate-400 font-bold">牌堆: 68</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span id="turnPermissionHint" class="text-[9px] text-emerald-400 font-bold">等待中...</span>
+                    <button id="backLobbyBtn" class="px-2 py-1 bg-slate-900/80 border border-white/10 text-slate-400 rounded-lg text-xs cursor-pointer"><i class="fa-solid fa-arrow-left"></i></button>
+                </div>
+            </div>
+
+            <div id="playerList" class="flex gap-1.5 overflow-x-auto pb-2 mb-2 no-scrollbar"></div>
+
+            <div class="flex-1 flex flex-col justify-center items-center relative z-10 mb-2">
+                <div id="turnBanner" class="w-full bg-slate-950/50 rounded-2xl p-3 border border-white/5 mb-2 flex justify-between items-center">
+                    <div>
+                        <span class="text-[8px] uppercase tracking-widest text-slate-500 font-black">当前回合</span>
+                        <h3 id="currentPlayerName" class="text-sm font-black text-slate-200">---</h3>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-[8px] text-slate-500">目标</span>
+                        <select id="targetSelect" class="bg-slate-900 border border-white/10 rounded-lg py-1 px-2 text-xs text-white focus:outline-none focus:border-purple-500"></select>
+                    </div>
+                </div>
+
+                <div id="handCards" class="flex gap-2 overflow-x-auto w-full pb-2 no-scrollbar"></div>
+            </div>
+
+            <div class="border-t border-white/5 pt-2 relative z-10">
+                <div class="flex justify-between items-center mb-1.5 px-1">
+                    <span class="text-[9px] font-black text-slate-400 flex items-center gap-1"><i class="fa-solid fa-bolt text-purple-400"></i> 已激活海克斯</span>
+                </div>
+                <div id="activeList" class="flex gap-1.5 overflow-x-auto pb-1 no-scrollbar"></div>
+            </div>
+
+            <div class="mt-2 space-y-1.5 relative z-10">
+                <div class="grid grid-cols-3 gap-1.5">
+                    <button id="drawBtn" class="py-2 bg-slate-900/80 border border-white/10 text-slate-300 rounded-lg text-[9px] font-bold cursor-pointer transition-all active:scale-95">摸牌</button>
+                    <button id="drinkDrawBtn" class="py-2 bg-amber-900/30 border border-amber-500/30 text-amber-400 rounded-lg text-[9px] font-bold cursor-pointer transition-all active:scale-95">喝 1 补 1</button>
+                    <button id="nextTurnBtn" class="py-2 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-lg text-[9px] font-black cursor-pointer transition-all active:scale-95">下一位</button>
+                </div>
+                <div class="grid grid-cols-4 gap-1.5">
+                    <button id="eventBtn" class="py-1.5 bg-slate-950/90 border border-white/5 text-slate-400 rounded-lg text-[8px] font-bold cursor-pointer transition-all active:scale-95">🎲 事件</button>
+                    <button id="ddBtn" class="py-1.5 bg-slate-950/90 border border-white/5 text-slate-400 rounded-lg text-[8px] font-bold cursor-pointer transition-all active:scale-95">DD 街区</button>
+                    <button id="shuffleDiscardBtn" class="py-1.5 bg-slate-950/90 border border-white/5 text-slate-400 rounded-lg text-[8px] font-bold cursor-pointer transition-all active:scale-95">洗牌</button>
+                    <button id="toggleLibraryBtn" class="py-1.5 bg-slate-950/90 border border-white/5 text-slate-400 rounded-lg text-[8px] font-bold cursor-pointer transition-all active:scale-95">卡库</button>
+                </div>
+            </div>
+
+            <div id="logDrawer" class="absolute bottom-0 left-0 right-0 bg-slate-950/95 border-t border-white/10 rounded-t-2xl transform translate-y-full transition-transform duration-300 z-30 max-h-[50%] flex flex-col">
+                <div class="flex justify-between items-center p-3 border-b border-white/5">
+                    <h3 class="text-xs font-black text-slate-300">酒局日志</h3>
+                    <button id="clearLogBtn" class="px-2 py-1 bg-slate-900/80 border border-white/10 text-slate-400 rounded-lg text-[8px] cursor-pointer">清空</button>
+                </div>
+                <div id="logList" class="flex-1 overflow-y-auto p-3 space-y-1.5 text-[9px] text-slate-400"></div>
+            </div>
+        </div>
+
+        <!-- ==================== LIBRARY ==================== -->
+        <div id="stage-library" class="hidden absolute inset-0 bg-slate-950/95 z-40 flex flex-col p-4">
+            <div class="flex justify-between items-center mb-3">
+                <h2 class="text-sm font-black text-slate-200">完整卡库</h2>
+                <button id="closeLibraryBtn" class="px-2 py-1 bg-slate-900/80 border border-white/10 text-slate-400 rounded-lg text-xs cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="flex gap-1.5 overflow-x-auto pb-2 mb-2 no-scrollbar">
+                <button class="filter-tab active px-3 py-1 bg-slate-900/80 border border-white/10 text-slate-300 rounded-full text-[8px] font-bold" data-filter="all">全部</button>
+                <button class="filter-tab px-3 py-1 bg-slate-900/80 border border-white/10 text-slate-500 rounded-full text-[8px] font-bold" data-filter="silver">银色</button>
+                <button class="filter-tab px-3 py-1 bg-slate-900/80 border border-white/10 text-slate-500 rounded-full text-[8px] font-bold" data-filter="gold">金色</button>
+                <button class="filter-tab px-3 py-1 bg-slate-900/80 border border-white/10 text-slate-500 rounded-full text-[8px] font-bold" data-filter="prismatic">彩色</button>
+            </div>
+            <div id="libraryGrid" class="flex-1 overflow-y-auto grid grid-cols-2 gap-2 pb-4"></div>
+        </div>
+
+        <!-- ==================== OVERLAYS ==================== -->
+        <div id="countdownOverlay" class="hidden absolute inset-0 bg-slate-950/95 z-50 flex items-center justify-center">
+            <div class="text-center p-6">
+                <h2 class="text-lg font-black text-amber-400 mb-2">⚡ 插播阶段</h2>
+                <div id="countdownTimer" class="text-6xl font-black text-red-500 animate-pulse mb-2">5</div>
+                <p id="countdownEventText" class="text-xs text-slate-400 mb-1"></p>
+                <p class="text-[9px] text-amber-500 font-bold">打出手牌影响结果！</p>
+            </div>
+        </div>
+
+        <div id="resolutionOverlay" class="hidden absolute inset-0 bg-slate-950/95 z-50 flex items-center justify-center p-4">
+            <div class="w-full max-w-sm bg-slate-900 border border-cyan-500/30 rounded-2xl p-5 text-center">
+                <div class="w-12 h-12 rounded-full bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center mx-auto mb-3 animate-pulse">
+                    <i class="fa-solid fa-scale-balanced text-xl text-cyan-400"></i>
+                </div>
+                <h2 class="text-lg font-black text-slate-100 mb-3">⚖️ 全息宣判</h2>
+                <pre id="resolutionText" class="text-left text-[10px] text-slate-300 leading-relaxed bg-slate-950/50 p-3 rounded-xl mb-4 max-h-[40vh] overflow-y-auto whitespace-pre-wrap"></pre>
+                <button onclick="document.getElementById('resolutionOverlay').classList.add('hidden')" class="w-full py-3 bg-gradient-to-r from-cyan-600 to-indigo-600 text-white font-black rounded-xl text-sm transition-all active:scale-95 cursor-pointer">继续战局</button>
+            </div>
+        </div>
+
+        <div id="hexChoiceOverlay" class="hidden absolute inset-0 bg-slate-950/95 z-50 flex items-center justify-center p-4">
+            <div class="w-full max-w-sm bg-slate-900 border border-amber-500/30 rounded-2xl p-5 text-center">
+                <h2 class="text-lg font-black text-amber-400 mb-1">🔮 海克斯强化</h2>
+                <p class="text-[9px] text-slate-400 mb-3">三选一，选择你的被动效果</p>
+                <div id="hexChoiceCards" class="space-y-2"></div>
+            </div>
+        </div>
     </div>
 
-    <main class="app-shell">
-      <!-- 首页 -->
-      <section class="panel home-panel" id="homePanel">
-        <div class="holo-logo">
-          <h1>HEXCORE</h1>
-          <p class="subtitle">喝酒之弈 · 赛博酒局</p>
-        </div>
-
-        <div class="menu-card glass">
-          <div class="menu-actions" id="menuChoices">
-            <button class="holo-btn primary" id="menuCreateBtn">
-              <span class="btn-icon">＋</span>
-              <span>创建房间</span>
-            </button>
-            <button class="holo-btn secondary" id="menuJoinBtn">
-              <span class="btn-icon">↪</span>
-              <span>加入房间</span>
-            </button>
-          </div>
-
-          <div class="form-panel" id="homeFormPanel" hidden>
-            <div class="form-header">
-              <h3 id="homeModeTitle">创建房间</h3>
-              <button class="icon-btn back-btn" id="backMenuBtn">←</button>
-            </div>
-
-            <div class="input-group">
-              <label class="holo-input">
-                <span class="label-text">昵称</span>
-                <input id="nicknameInput" maxlength="10" placeholder="输入你的代号" autocomplete="nickname" />
-              </label>
-            </div>
-
-            <div class="form-fields" id="createFields">
-              <label class="holo-input">
-                <span class="label-text">房间密码（可选）</span>
-                <input id="createPasswordInput" maxlength="18" placeholder="留空则无密码" autocomplete="new-password" />
-              </label>
-              <button class="holo-btn primary full-width" id="createRoomBtn">确认创建</button>
-            </div>
-
-            <div class="form-fields hidden" id="joinFields">
-              <label class="holo-input">
-                <span class="label-text">房号</span>
-                <input id="joinCodeInput" maxlength="6" placeholder="6 位数字房号" inputmode="numeric" />
-              </label>
-              <label class="holo-input">
-                <span class="label-text">房间密码</span>
-                <input id="joinPasswordInput" maxlength="18" placeholder="无密码则留空" autocomplete="current-password" />
-              </label>
-              <button class="holo-btn secondary full-width" id="joinRoomBtn">确认加入</button>
-            </div>
-          </div>
-
-          <div class="status-bar">
-            <span class="status-dot" id="connectionStatus">正在连接...</span>
-          </div>
-          <div class="warning-text" id="serviceWarning"></div>
-        </div>
-      </section>
-
-      <!-- 房间大厅 -->
-      <section class="panel lobby-panel" id="lobbyPanel" hidden>
-        <div class="lobby-header glass">
-          <div class="room-info">
-            <span class="room-label">ROOM</span>
-            <strong id="lobbyRoomTitle">喝酒之弈</strong>
-            <span class="room-code" id="lobbyRoomCode">------</span>
-          </div>
-          <div class="lobby-actions">
-            <button class="icon-btn" id="copyRoomBtn" title="复制房号">📋</button>
-            <button class="icon-btn danger" id="leaveRoomBtn" title="离开房间">✕</button>
-          </div>
-        </div>
-
-        <div class="lobby-content">
-          <div class="section-title">
-            <h2>在线玩家</h2>
-            <span class="count-badge" id="playerCount">0</span>
-          </div>
-          <div class="player-list" id="lobbyPlayers"></div>
-
-          <div class="settings-panel glass">
-            <div class="section-title">
-              <h2>房间设置</h2>
-            </div>
-            <div class="settings-grid">
-              <label class="holo-input">
-                <span class="label-text">房间名</span>
-                <input id="roomNameInput" maxlength="14" />
-              </label>
-              <label class="holo-input">
-                <span class="label-text">密码</span>
-                <input id="roomPasswordInput" maxlength="18" placeholder="留空表示无密码" />
-              </label>
-              <label class="checkbox-line">
-                <input id="clearPasswordInput" type="checkbox" />
-                <span>清除密码</span>
-              </label>
-              <label class="holo-input">
-                <span class="label-text">初始手牌</span>
-                <input id="initialHandInput" min="1" max="5" type="number" />
-              </label>
-              <label class="holo-input">
-                <span class="label-text">手牌上限</span>
-                <input id="handLimitInput" min="3" max="8" type="number" />
-              </label>
-              <label class="holo-input">
-                <span class="label-text">初始血量（杯）</span>
-                <input id="maxDrinksInput" min="1" max="10" type="number" />
-              </label>
-            </div>
-            <div class="lobby-footer">
-              <button class="holo-btn ghost" id="saveSettingsBtn">保存设置</button>
-              <button class="holo-btn primary" id="startRoomGameBtn">开始游戏</button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- 游戏桌面 -->
-      <section class="panel game-panel" id="gamePanel" hidden>
-        <div class="game-top-bar">
-          <div class="game-info">
-            <span class="round-badge" id="roundStat">R1</span>
-            <span class="deck-info">牌堆 <b id="deckStat">68</b></span>
-            <span class="deck-info">弃牌 <b id="discardStat">0</b></span>
-          </div>
-          <div class="game-controls">
-            <span id="turnPermissionHint">等待中...</span>
-            <button class="icon-btn" id="backLobbyBtn">←</button>
-          </div>
-        </div>
-
-        <div class="game-arena">
-          <!-- 玩家血条区域 -->
-          <div class="players-track" id="playerList"></div>
-
-          <!-- 事件横幅 -->
-          <div class="event-banner" id="turnBanner">
-            <div class="banner-content">
-              <p class="banner-label">当前回合</p>
-              <h2 id="currentPlayerName">---</h2>
-            </div>
-            <div class="target-display">
-              <span>目标：</span>
-              <select id="targetSelect" aria-label="选择目标玩家"></select>
-            </div>
-          </div>
-
-          <!-- 手牌区域 -->
-          <div class="hand-area">
-            <div class="hand-header">
-              <h3 id="handTitle">手牌</h3>
-              <span class="limit-tag" id="handLimitLabel">上限 5</span>
-            </div>
-            <div class="card-carousel" id="handCards">
-              <div class="empty-state">等待发牌...</div>
-            </div>
-          </div>
-
-          <!-- 持续效果 -->
-          <div class="active-effects">
-            <h4>已激活海克斯</h4>
-            <div class="effects-scroll" id="activeList"></div>
-          </div>
-        </div>
-
-        <!-- 底部操作栏 -->
-        <div class="bottom-actions">
-          <div class="action-row">
-            <button class="holo-btn action" id="drawBtn">摸牌</button>
-            <button class="holo-btn action accent" id="drinkDrawBtn">喝 1 补 1</button>
-            <button class="holo-btn action primary" id="nextTurnBtn">下一位</button>
-          </div>
-          <div class="special-row">
-            <button class="holo-btn mini" id="eventBtn">🎲 事件</button>
-            <button class="holo-btn mini" id="ddBtn">DD 街区</button>
-            <button class="holo-btn mini" id="shuffleDiscardBtn">洗牌</button>
-            <button class="holo-btn mini" id="toggleLibraryBtn">卡库</button>
-          </div>
-        </div>
-
-        <!-- 日志抽屉 -->
-        <div class="log-drawer" id="logDrawer">
-          <div class="log-header">
-            <h3>酒局日志</h3>
-            <button class="icon-btn" id="clearLogBtn">清空</button>
-          </div>
-          <div class="log-content" id="logList"></div>
-        </div>
-      </section>
-
-      <!-- 卡库面板 -->
-      <section class="panel library-panel" id="libraryPanel" hidden>
-        <div class="library-header">
-          <h2>完整卡库</h2>
-          <button class="icon-btn close-lib" id="closeLibraryBtn">✕</button>
-        </div>
-        <div class="filter-tabs">
-          <button class="filter-tab active" data-filter="all">全部</button>
-          <button class="filter-tab" data-filter="silver">银色</button>
-          <button class="filter-tab" data-filter="gold">金色</button>
-          <button class="filter-tab" data-filter="prismatic">彩色</button>
-        </div>
-        <div class="library-scroll" id="libraryGrid"></div>
-      </section>
-    </main>
-
-    <!-- 倒计时遮罩 -->
-    <div class="overlay countdown-overlay" id="countdownOverlay">
-      <div class="overlay-content countdown">
-        <h2>⚡ 插播阶段</h2>
-        <div class="countdown-number" id="countdownTimer">5</div>
-        <p id="countdownEventText"></p>
-        <p class="hint">打出手牌影响结果！</p>
-      </div>
-    </div>
-
-    <!-- 结算遮罩 -->
-    <div class="overlay resolution-overlay" id="resolutionOverlay">
-      <div class="overlay-content resolution">
-        <h2>⚖️ 全息宣判</h2>
-        <pre id="resolutionText"></pre>
-      </div>
-    </div>
-
-    <!-- 海克斯选择遮罩 -->
-    <div class="overlay hex-overlay" id="hexChoiceOverlay">
-      <div class="overlay-content hex-choice">
-        <h2>🔮 海克斯强化</h2>
-        <p>三选一，选择你的被动效果</p>
-        <div class="hex-choice-cards" id="hexChoiceCards"></div>
-      </div>
-    </div>
-
-    <!-- Toast 提示 -->
-    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <div id="toast" class="fixed bottom-20 left-1/2 -translate-x-1/2 bg-slate-900/90 border border-purple-500/30 text-purple-400 px-4 py-2 rounded-full text-xs font-bold shadow-lg opacity-0 translate-y-4 transition-all duration-300 z-[60] pointer-events-none"></div>
 
     <script type="module" src="./assets/app.js"></script>
-  </body>
+</body>
 </html>
