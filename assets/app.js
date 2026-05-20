@@ -146,6 +146,9 @@ const els = {
   resolutionText: document.querySelector("#resolutionText"),
   hexChoiceOverlay: document.querySelector("#hexChoiceOverlay"),
   hexChoiceCards: document.querySelector("#hexChoiceCards"),
+  penaltyOverlay: document.querySelector("#penaltyOverlay"),
+  penaltyText: document.querySelector("#penaltyText"),
+  penaltyAckBtn: document.querySelector("#penaltyAckBtn"),
 };
 
 let realtime = { configured: false, reason: "正在连接 Firebase..." };
@@ -837,6 +840,8 @@ function applyFinalPenalties(penalties, log) {
       log.push(`💀 ${player.name} 酒量耗尽，出局！`);
     }
 
+    showPenaltyScreen(player.id, `你被判定喝 ${p.amount} 杯\n剩余酒量：${player.remainingDrinks}/${player.maxDrinks}`);
+
     for (const other of state.players) {
       if (other.id !== player.id && !other.isOut && other.active.some((c) => c.key === "pharmacist")) {
         other.skipCount += 1;
@@ -1149,6 +1154,14 @@ function showHexChoice() {
 
 function hideHexChoice() { if (els.hexChoiceOverlay) els.hexChoiceOverlay.classList.add("hidden"); }
 
+function showPenaltyScreen(targetId, message) {
+  if (!els.penaltyOverlay || !els.penaltyText) return;
+  if (session.clientId !== targetId) return; 
+  
+  els.penaltyText.textContent = message;
+  els.penaltyOverlay.classList.remove("hidden");
+}
+
 function showResolution(text) {
   if (els.resolutionOverlay) { els.resolutionText.textContent = text; els.resolutionOverlay.classList.remove("hidden"); setTimeout(() => { els.resolutionOverlay.classList.add("hidden"); }, 6000); }
 }
@@ -1416,6 +1429,7 @@ function renderLibrary() {
 }
 
 function bindEvents() {
+  bindPenaltyAck();
   els.menuCreateBtn.addEventListener("click", () => { homeMode = "create"; renderHome(); });
   els.menuJoinBtn.addEventListener("click", () => { homeMode = "join"; renderHome(); });
   els.backMenuBtn.addEventListener("click", () => { homeMode = "menu"; renderHome(); });
