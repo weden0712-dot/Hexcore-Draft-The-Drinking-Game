@@ -219,6 +219,7 @@ function createEmptyState() {
     countdownEndsAt: 0,
     countdownCards: [],
     hexChoices: [],
+    hexPendingPlayers: [],
     hexChoiceRound: 0,
     actionTaken: false,
   };
@@ -266,6 +267,7 @@ function buildGameState(room) {
     countdownEndsAt: 0,
     countdownCards: [],
     hexChoices: [],
+    hexPendingPlayers: [],
     hexChoiceRound: 0,
     actionTaken: false,
   };
@@ -332,6 +334,7 @@ function normalizeState() {
   state.rules = Array.isArray(state.rules) ? state.rules : [];
   state.countdownCards = Array.isArray(state.countdownCards) ? state.countdownCards : [];
   state.hexChoices = Array.isArray(state.hexChoices) ? state.hexChoices : [];
+  state.hexPendingPlayers = Array.isArray(state.hexPendingPlayers) ? state.hexPendingPlayers : [];
   state.currentEvent = state.currentEvent || null;
   state.phase = state.phase || "normal";
   state.round = state.round || 1;
@@ -1099,8 +1102,9 @@ function checkHexChoiceTrigger() {
     state.hexChoiceRound = state.round;
     const shuffled = shuffle([...HEX_CHOICES_POOL]);
     state.hexChoices = shuffled.slice(0, 3).map((h, i) => ({ ...h, choiceId: `hex-${cryptoRandomId()}-${i}` }));
+    state.hexPendingPlayers = state.players.map(p => p.id);
     state.phase = "hexChoice";
-    addLog(`🔮 海克斯强化轮！请选择一个被动效果。`);
+    addLog(`🔮 海克斯强化轮！所有玩家请选择一个被动效果。`);
     commitGame();
     showHexChoice();
   }
@@ -1108,22 +1112,37 @@ function checkHexChoiceTrigger() {
 
 function selectHexChoice(choiceId) {
   const viewer = viewerPlayer();
+  if (!state.hexPendingPlayers.includes(viewer.id)) {
+    showToast("你已经选择过了，等待其他玩家。");
+    return;
+  }
   const choice = state.hexChoices.find((c) => c.choiceId === choiceId);
   if (!choice) return;
   const def = HEX_CHOICES_POOL.find((h) => h.key === choice.key);
   if (!def) return;
   def.apply(viewer);
   addLog(`${viewer.name} 选择了海克斯「${choice.name}」：${choice.effect}`);
-  state.hexChoices = [];
-  state.phase = "normal";
+  state.hexPendingPlayers = state.hexPendingPlayers.filter(id => id !== viewer.id);
+  if (state.hexPendingPlayers.length === 0) {
+    state.hexChoices = [];
+    state.phase = "normal";
+  }
   commitGame();
-  hideHexChoice();
+  showHexChoice(); 
   showToast(`获得海克斯：${choice.name}`);
 }
 
 function showHexChoice() {
   if (!els.hexChoiceOverlay || !els.hexChoiceCards) return;
-  els.hexChoiceCards.innerHTML = state.hexChoices.map((c) => `<button class="hex-choice-card" data-hex-choice="${c.choiceId}"><h3>${escapeHtml(c.name)}</h3><p>${escapeHtml(c.effect)}</p></button>`).join("");
+  const viewer = viewerPlayer();
+  const hasChosen = !state.hexPendingPlayers.includes(viewer.id);
+  const remaining = state.hexPendingPlayers.length;
+  
+  if (hasChosen) {
+    els.hexChoiceCards.innerHTML = `<div class="text-center p-4"><p class="text-slate-400 mb-2">你已选择完毕</p><p class="text-xs text-cyan-400 animate-pulse">等待其他 ${remaining} 位玩家选择...</p></div>`;
+  } else {
+    els.hexChoiceCards.innerHTML = state.hexChoices.map((c) => `<button class="hex-choice-card" data-hex-choice="${c.choiceId}"><h3>${escapeHtml(c.name)}</h3><p>${escapeHtml(c.effect)}</p></button>`).join("");
+  }
   els.hexChoiceOverlay.classList.remove("hidden");
 }
 
