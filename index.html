@@ -187,7 +187,10 @@
             <div id="logDrawer" class="absolute bottom-0 left-0 right-0 bg-slate-950/95 border-t border-white/10 rounded-t-2xl transform translate-y-full transition-transform duration-300 z-30 max-h-[50%] flex flex-col">
                 <div class="flex justify-between items-center p-3 border-b border-white/5">
                     <h3 class="text-xs font-black text-slate-300">酒局日志</h3>
-                    <button id="clearLogBtn" class="px-2 py-1 bg-slate-900/80 border border-white/10 text-slate-400 rounded-lg text-[8px] cursor-pointer">清空</button>
+                    <div class="flex gap-2">
+                        <button id="clearLogBtn" class="px-2 py-1 bg-slate-900/80 border border-white/10 text-slate-400 rounded-lg text-[8px] cursor-pointer">清空</button>
+                        <button id="closeLogBtn" class="px-2 py-1 bg-slate-900/80 border border-white/10 text-slate-400 rounded-lg text-[8px] cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
                 </div>
                 <div id="logList" class="flex-1 overflow-y-auto p-3 space-y-1.5 text-[9px] text-slate-400"></div>
             </div>
