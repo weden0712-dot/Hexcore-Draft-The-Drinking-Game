@@ -185,6 +185,12 @@ async function initRealtime() {
     console.log("[app.js] Realtime client created, configured:", realtime.configured, "uid:", realtime.uid);
     if (realtime.configured) {
       console.log("[app.js] Using local clientId:", session.clientId);
+      const savedRoomCode = sessionStorage.getItem("drink-tactics-room");
+      if (savedRoomCode) {
+        console.log("[app.js] Restoring room from sessionStorage:", savedRoomCode);
+        session.roomCode = savedRoomCode;
+        enterRoom(savedRoomCode);
+      }
     } else {
       console.warn("[app.js] Realtime client not configured");
     }
@@ -447,6 +453,7 @@ async function joinRoomFlow() {
 async function enterRoom(code) {
   if (session.unsubscribe) { session.unsubscribe(); session.unsubscribe = null; }
   session.roomCode = code;
+  sessionStorage.setItem("drink-tactics-room", code);
   session.unsubscribe = realtime.subscribeRoom(code, (room) => {
     if (!room) { showToast("房间已不存在。"); resetSessionToHome(); return; }
     session.room = room;
@@ -461,7 +468,19 @@ async function enterRoom(code) {
 
 async function leaveRoom() {
   if (session.roomCode && realtime.configured) { try { await realtime.setPlayerOnline(session.roomCode, session.clientId, false); } catch {} }
+  sessionStorage.removeItem("drink-tactics-room");
   resetSessionToHome();
+}
+
+function resetSessionToHome() {
+  if (session.unsubscribe) { session.unsubscribe(); session.unsubscribe = null; }
+  session.roomCode = "";
+  session.room = null;
+  session.isHost = false;
+  state = createEmptyState();
+  sessionStorage.removeItem("drink-tactics-room");
+  homeMode = "menu";
+  render();
 }
 
 function resetSessionToHome() {
