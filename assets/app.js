@@ -115,6 +115,7 @@ const els = {
   deckStat: document.querySelector("#deckStat"),
   discardStat: document.querySelector("#discardStat"),
   playerList: document.querySelector("#playerList"),
+  actionFeed: document.querySelector("#actionFeed"),
   turnPermissionHint: document.querySelector("#turnPermissionHint"),
   backLobbyBtn: document.querySelector("#backLobbyBtn"),
   currentPlayerName: document.querySelector("#currentPlayerName"),
@@ -1242,9 +1243,25 @@ async function commitGame() {
   catch (error) { showToast(`同步失败：${error.message}`); }
 }
 
+let actionFeedTimer = null;
+
 function addLog(message) {
   state.log.unshift({ id: `log-${cryptoRandomId()}`, message, time: shortTime() });
   state.log = state.log.slice(0, 80);
+  showActionFeed(message);
+}
+
+function showActionFeed(message) {
+  if (!els.actionFeed) return;
+  els.actionFeed.textContent = message;
+  els.actionFeed.style.opacity = "1";
+  els.actionFeed.style.transform = "translateY(0)";
+  
+  if (actionFeedTimer) clearTimeout(actionFeedTimer);
+  actionFeedTimer = setTimeout(() => {
+    els.actionFeed.style.opacity = "0";
+    els.actionFeed.style.transform = "translateY(-10px)";
+  }, 4000);
 }
 
 function render() {
