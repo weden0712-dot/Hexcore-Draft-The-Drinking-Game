@@ -3,293 +3,258 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-    <meta name="theme-color" content="#0f172a" />
+    <meta name="theme-color" content="#050510" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta
-      name="description"
-      content="《喝酒之弈》68张海克斯扑克牌 H5 酒桌小游戏"
-    />
-    <title>喝酒之弈 | 海克斯酒桌卡牌</title>
+    <title>喝酒之弈 | HEXCORE</title>
     <link rel="icon" href="./assets/card-back.svg" />
     <link rel="stylesheet" href="./assets/styles.css" />
   </head>
   <body>
+    <div class="ar-background">
+      <div class="grid-floor"></div>
+      <div class="scan-line"></div>
+      <div class="particles" id="particles"></div>
+    </div>
+
     <main class="app-shell">
-      <header class="app-header">
-        <div>
-          <p class="eyebrow">68 张海克斯扑克牌 H5</p>
-          <h1>喝酒之弈</h1>
-          <p class="tagline">银、金、彩三级强化。创建房间、输入房号加入，同桌或异地都能一起开局。</p>
+      <!-- 首页 -->
+      <section class="panel home-panel" id="homePanel">
+        <div class="holo-logo">
+          <h1>HEXCORE</h1>
+          <p class="subtitle">喝酒之弈 · 赛博酒局</p>
         </div>
-        <div class="safety-note">
-          可把喝酒替换成喝水、真心话或贴纸惩罚。未成年人请勿饮酒，酒局请量力而行。
-        </div>
-      </header>
 
-      <section class="home-panel" id="homePanel" aria-label="联机目录">
-        <div class="menu-card">
-          <div class="menu-title">
-            <h2>喝酒之弈</h2>
-            <p>HEXCORE DRINKING GAME</p>
-          </div>
-
+        <div class="menu-card glass">
           <div class="menu-actions" id="menuChoices">
-            <button class="menu-button menu-button-primary" id="menuCreateBtn" type="button">
-              <span>＋</span>
-              创建全新房间
+            <button class="holo-btn primary" id="menuCreateBtn">
+              <span class="btn-icon">＋</span>
+              <span>创建房间</span>
             </button>
-            <button class="menu-button menu-button-secondary" id="menuJoinBtn" type="button">
-              <span>↪</span>
-              输入房号加入
+            <button class="holo-btn secondary" id="menuJoinBtn">
+              <span class="btn-icon">↪</span>
+              <span>加入房间</span>
             </button>
           </div>
 
-          <div class="menu-form" id="homeFormPanel" hidden>
-            <div class="menu-form-heading">
-              <div>
-                <h3 id="homeModeTitle">创建全新房间</h3>
-                <p id="homeModeHint">生成 6 位房号，邀请朋友进入同一局。</p>
-              </div>
-              <button class="menu-back-button" id="backMenuBtn" type="button">返回</button>
+          <div class="form-panel" id="homeFormPanel" hidden>
+            <div class="form-header">
+              <h3 id="homeModeTitle">创建房间</h3>
+              <button class="icon-btn back-btn" id="backMenuBtn">←</button>
             </div>
 
-            <label class="wide-field">
-              <span>你的昵称</span>
-              <input id="nicknameInput" maxlength="10" placeholder="输入酒桌名号" autocomplete="nickname" />
-            </label>
-
-            <div class="mode-fields" id="createFields">
-              <label class="wide-field">
-                <span>房间密码（可不填）</span>
-                <input id="createPasswordInput" maxlength="18" placeholder="空密码也可以开局" autocomplete="new-password" />
+            <div class="input-group">
+              <label class="holo-input">
+                <span class="label-text">昵称</span>
+                <input id="nicknameInput" maxlength="10" placeholder="输入你的代号" autocomplete="nickname" />
               </label>
-              <button class="primary-button" id="createRoomBtn" type="button">确认创建</button>
             </div>
 
-            <div class="mode-fields" id="joinFields" hidden>
-              <label class="wide-field">
-                <span>房号</span>
-                <input id="joinCodeInput" maxlength="6" placeholder="例如 839204" inputmode="numeric" />
+            <div class="form-fields" id="createFields">
+              <label class="holo-input">
+                <span class="label-text">房间密码（可选）</span>
+                <input id="createPasswordInput" maxlength="18" placeholder="留空则无密码" autocomplete="new-password" />
               </label>
-              <label class="wide-field">
-                <span>房间密码</span>
+              <button class="holo-btn primary full-width" id="createRoomBtn">确认创建</button>
+            </div>
+
+            <div class="form-fields hidden" id="joinFields">
+              <label class="holo-input">
+                <span class="label-text">房号</span>
+                <input id="joinCodeInput" maxlength="6" placeholder="6 位数字房号" inputmode="numeric" />
+              </label>
+              <label class="holo-input">
+                <span class="label-text">房间密码</span>
                 <input id="joinPasswordInput" maxlength="18" placeholder="无密码则留空" autocomplete="current-password" />
               </label>
-              <button class="secondary-button" id="joinRoomBtn" type="button">确认加入</button>
+              <button class="holo-btn secondary full-width" id="joinRoomBtn">确认加入</button>
             </div>
           </div>
 
-          <div class="menu-footnote">
-            <span>i</span>
-            本游戏属于高能劝酒局，请量力而行
+          <div class="status-bar">
+            <span class="status-dot" id="connectionStatus">正在连接...</span>
           </div>
-
-          <div class="connection-pill" id="connectionStatus">正在检测联机服务</div>
-          <div class="service-warning" id="serviceWarning"></div>
+          <div class="warning-text" id="serviceWarning"></div>
         </div>
       </section>
 
-      <section class="lobby-panel panel" id="lobbyPanel" aria-label="房间大厅" hidden>
-        <div class="room-hero">
-          <div>
-            <p class="eyebrow">等待开局</p>
-            <h2 id="lobbyRoomTitle">喝酒之弈房间</h2>
-            <p>房号 <strong id="lobbyRoomCode">------</strong></p>
+      <!-- 房间大厅 -->
+      <section class="panel lobby-panel" id="lobbyPanel" hidden>
+        <div class="lobby-header glass">
+          <div class="room-info">
+            <span class="room-label">ROOM</span>
+            <strong id="lobbyRoomTitle">喝酒之弈</strong>
+            <span class="room-code" id="lobbyRoomCode">------</span>
           </div>
           <div class="lobby-actions">
-            <button class="secondary-button" id="copyRoomBtn" type="button">复制房号</button>
-            <button class="ghost-button danger" id="leaveRoomBtn" type="button">离开房间</button>
+            <button class="icon-btn" id="copyRoomBtn" title="复制房号">📋</button>
+            <button class="icon-btn danger" id="leaveRoomBtn" title="离开房间">✕</button>
           </div>
         </div>
 
-        <div class="lobby-grid">
-          <section class="lobby-card">
-            <div class="section-heading compact">
-              <div>
-                <p class="eyebrow">在线玩家</p>
-                <h2>房间成员</h2>
-              </div>
-            </div>
-            <div class="lobby-player-list" id="lobbyPlayers"></div>
-          </section>
+        <div class="lobby-content">
+          <div class="section-title">
+            <h2>在线玩家</h2>
+            <span class="count-badge" id="playerCount">0</span>
+          </div>
+          <div class="player-list" id="lobbyPlayers"></div>
 
-          <section class="lobby-card">
-            <div class="section-heading compact">
-              <div>
-                <p class="eyebrow">房主设置</p>
-                <h2>开局参数</h2>
-              </div>
+          <div class="settings-panel glass">
+            <div class="section-title">
+              <h2>房间设置</h2>
             </div>
             <div class="settings-grid">
-              <label class="wide-field">
-                <span>房间名</span>
+              <label class="holo-input">
+                <span class="label-text">房间名</span>
                 <input id="roomNameInput" maxlength="14" />
               </label>
-              <label class="wide-field">
-                <span>房间密码</span>
+              <label class="holo-input">
+                <span class="label-text">密码</span>
                 <input id="roomPasswordInput" maxlength="18" placeholder="留空表示无密码" />
               </label>
               <label class="checkbox-line">
                 <input id="clearPasswordInput" type="checkbox" />
-                <span>清除房间密码</span>
+                <span>清除密码</span>
               </label>
-              <label class="wide-field">
-                <span>初始手牌</span>
+              <label class="holo-input">
+                <span class="label-text">初始手牌</span>
                 <input id="initialHandInput" min="1" max="5" type="number" />
               </label>
-              <label class="wide-field">
-                <span>手牌上限</span>
+              <label class="holo-input">
+                <span class="label-text">手牌上限</span>
                 <input id="handLimitInput" min="3" max="8" type="number" />
               </label>
-              <label class="wide-field">
-                <span>初始血条（杯）</span>
+              <label class="holo-input">
+                <span class="label-text">初始血量（杯）</span>
                 <input id="maxDrinksInput" min="1" max="10" type="number" />
               </label>
             </div>
-            <div class="setup-actions">
-              <button class="ghost-button" id="saveSettingsBtn" type="button">保存设置</button>
-              <button class="primary-button" id="startRoomGameBtn" type="button">房主开始游戏</button>
+            <div class="lobby-footer">
+              <button class="holo-btn ghost" id="saveSettingsBtn">保存设置</button>
+              <button class="holo-btn primary" id="startRoomGameBtn">开始游戏</button>
             </div>
-          </section>
+          </div>
         </div>
       </section>
 
-      <section class="game-stage" id="gamePanel" aria-label="游戏桌面" hidden>
-        <div class="room-bar">
-          <div>
-            <p class="eyebrow">联机房间</p>
-            <strong id="gameRoomInfo">房号 ------</strong>
+      <!-- 游戏桌面 -->
+      <section class="panel game-panel" id="gamePanel" hidden>
+        <div class="game-top-bar">
+          <div class="game-info">
+            <span class="round-badge" id="roundStat">R1</span>
+            <span class="deck-info">牌堆 <b id="deckStat">68</b></span>
+            <span class="deck-info">弃牌 <b id="discardStat">0</b></span>
           </div>
-          <div class="room-bar-actions">
-            <span id="turnPermissionHint"></span>
-            <button class="ghost-button" id="backLobbyBtn" type="button">回大厅</button>
+          <div class="game-controls">
+            <span id="turnPermissionHint">等待中...</span>
+            <button class="icon-btn" id="backLobbyBtn">←</button>
           </div>
         </div>
 
-        <div class="table-grid">
-          <aside class="panel score-panel">
-          <div class="section-heading compact">
-            <div>
-              <p class="eyebrow">战况</p>
-              <h2>玩家席位</h2>
+        <div class="game-arena">
+          <!-- 玩家血条区域 -->
+          <div class="players-track" id="playerList"></div>
+
+          <!-- 事件横幅 -->
+          <div class="event-banner" id="turnBanner">
+            <div class="banner-content">
+              <p class="banner-label">当前回合</p>
+              <h2 id="currentPlayerName">---</h2>
             </div>
-            <button class="ghost-button danger" id="newGameBtn" type="button">重开</button>
-          </div>
-          <div class="stats-strip">
-            <div>
-              <span id="roundStat">第 1 轮</span>
-              <small>当前轮次</small>
-            </div>
-            <div>
-              <span id="deckStat">68</span>
-              <small>牌堆</small>
-            </div>
-            <div>
-              <span id="discardStat">0</span>
-              <small>弃牌</small>
+            <div class="target-display">
+              <span>目标：</span>
+              <select id="targetSelect" aria-label="选择目标玩家"></select>
             </div>
           </div>
-            <div class="player-list" id="playerList"></div>
-          </aside>
 
-          <section class="panel play-panel">
-            <div class="turn-banner" id="turnBanner"></div>
-            <div class="action-row">
-              <label class="target-picker">
-                <span>目标</span>
-                <select id="targetSelect" aria-label="选择目标玩家"></select>
-              </label>
-              <button class="secondary-button" id="drawBtn" type="button">摸 1 张</button>
-              <button class="secondary-button" id="drinkDrawBtn" type="button">喝完补牌</button>
-              <button class="primary-button" id="nextTurnBtn" type="button">下一位</button>
-              <button class="primary-button" id="confirmEventBtn" type="button" hidden>确认目标</button>
+          <!-- 手牌区域 -->
+          <div class="hand-area">
+            <div class="hand-header">
+              <h3 id="handTitle">手牌</h3>
+              <span class="limit-tag" id="handLimitLabel">上限 5</span>
             </div>
-
-            <div class="special-row">
-              <button class="ghost-button" id="eventBtn" type="button">🎲 触发事件</button>
-              <button class="ghost-button" id="ddBtn" type="button">DD 街区翻两张</button>
-              <button class="ghost-button" id="shuffleDiscardBtn" type="button">弃牌洗回牌堆</button>
-              <button class="ghost-button" id="toggleLibraryBtn" type="button">查看卡库</button>
+            <div class="card-carousel" id="handCards">
+              <div class="empty-state">等待发牌...</div>
             </div>
+          </div>
 
-            <section class="hand-section">
-              <div class="section-heading compact">
-                <div>
-                  <p class="eyebrow" id="handLimitLabel">手牌上限 5</p>
-                  <h2 id="handTitle">当前手牌</h2>
-                </div>
-              </div>
-              <div class="card-grid" id="handCards"></div>
-            </section>
+          <!-- 持续效果 -->
+          <div class="active-effects">
+            <h4>已激活海克斯</h4>
+            <div class="effects-scroll" id="activeList"></div>
+          </div>
+        </div>
 
-            <section class="active-section">
-              <div class="section-heading compact">
-                <div>
-                  <p class="eyebrow">持续效果</p>
-                  <h2>已激活海克斯</h2>
-                </div>
-              </div>
-              <div class="active-list" id="activeList"></div>
-            </section>
-          </section>
+        <!-- 底部操作栏 -->
+        <div class="bottom-actions">
+          <div class="action-row">
+            <button class="holo-btn action" id="drawBtn">摸牌</button>
+            <button class="holo-btn action accent" id="drinkDrawBtn">喝 1 补 1</button>
+            <button class="holo-btn action primary" id="nextTurnBtn">下一位</button>
+          </div>
+          <div class="special-row">
+            <button class="holo-btn mini" id="eventBtn">🎲 事件</button>
+            <button class="holo-btn mini" id="ddBtn">DD 街区</button>
+            <button class="holo-btn mini" id="shuffleDiscardBtn">洗牌</button>
+            <button class="holo-btn mini" id="toggleLibraryBtn">卡库</button>
+          </div>
+        </div>
 
-          <aside class="panel log-panel">
-            <div class="section-heading compact">
-              <div>
-                <p class="eyebrow">规则与记录</p>
-                <h2>酒局日志</h2>
-              </div>
-              <button class="ghost-button" id="clearLogBtn" type="button">清空</button>
-            </div>
-            <div class="rule-list" id="ruleList"></div>
-            <div class="log-list" id="logList"></div>
-          </aside>
+        <!-- 日志抽屉 -->
+        <div class="log-drawer" id="logDrawer">
+          <div class="log-header">
+            <h3>酒局日志</h3>
+            <button class="icon-btn" id="clearLogBtn">清空</button>
+          </div>
+          <div class="log-content" id="logList"></div>
         </div>
       </section>
 
-      <section class="library-panel panel" id="libraryPanel">
-        <div class="section-heading">
-          <div>
-            <p class="eyebrow">完整卡库</p>
-            <h2>68 张海克斯卡牌</h2>
-          </div>
-          <div class="filter-tabs" role="tablist" aria-label="卡牌筛选">
-            <button class="filter-tab active" data-filter="all" type="button">全部</button>
-            <button class="filter-tab" data-filter="silver" type="button">银色</button>
-            <button class="filter-tab" data-filter="gold" type="button">金色</button>
-            <button class="filter-tab" data-filter="prismatic" type="button">彩色</button>
-          </div>
+      <!-- 卡库面板 -->
+      <section class="panel library-panel" id="libraryPanel" hidden>
+        <div class="library-header">
+          <h2>完整卡库</h2>
+          <button class="icon-btn close-lib" id="closeLibraryBtn">✕</button>
         </div>
-        <div class="library-grid" id="libraryGrid"></div>
+        <div class="filter-tabs">
+          <button class="filter-tab active" data-filter="all">全部</button>
+          <button class="filter-tab" data-filter="silver">银色</button>
+          <button class="filter-tab" data-filter="gold">金色</button>
+          <button class="filter-tab" data-filter="prismatic">彩色</button>
+        </div>
+        <div class="library-scroll" id="libraryGrid"></div>
       </section>
     </main>
 
-    <div class="toast" id="toast" role="status" aria-live="polite"></div>
-
-    <div class="overlay" id="countdownOverlay">
+    <!-- 倒计时遮罩 -->
+    <div class="overlay countdown-overlay" id="countdownOverlay">
       <div class="overlay-content countdown">
-        <h2>⚡ 插播倒计时</h2>
+        <h2>⚡ 插播阶段</h2>
         <div class="countdown-number" id="countdownTimer">5</div>
         <p id="countdownEventText"></p>
-        <p class="countdown-hint">打出手牌影响结果！</p>
+        <p class="hint">打出手牌影响结果！</p>
       </div>
     </div>
 
-    <div class="overlay" id="resolutionOverlay">
+    <!-- 结算遮罩 -->
+    <div class="overlay resolution-overlay" id="resolutionOverlay">
       <div class="overlay-content resolution">
         <h2>⚖️ 全息宣判</h2>
         <pre id="resolutionText"></pre>
       </div>
     </div>
 
-    <div class="overlay" id="hexChoiceOverlay">
+    <!-- 海克斯选择遮罩 -->
+    <div class="overlay hex-overlay" id="hexChoiceOverlay">
       <div class="overlay-content hex-choice">
         <h2>🔮 海克斯强化</h2>
-        <p>三选一，选择一个被动效果</p>
+        <p>三选一，选择你的被动效果</p>
         <div class="hex-choice-cards" id="hexChoiceCards"></div>
       </div>
     </div>
+
+    <!-- Toast 提示 -->
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
     <script type="module" src="./assets/app.js"></script>
   </body>

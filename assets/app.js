@@ -14,323 +14,33 @@ const TIER_META = {
 };
 
 const CARD_DEFINITIONS = [
-  {
-    key: "unyielding-will",
-    tier: "silver",
-    name: "不屈意志",
-    count: 3,
-    type: "盾",
-    timing: "插播阶段",
-    effect: "本轮内，你免疫任何人的劝酒或指定。",
-    mode: "defense",
-    tags: ["defense"],
-  },
-  {
-    key: "grab-bag",
-    tier: "silver",
-    name: "百宝袋",
-    count: 3,
-    type: "即时",
-    timing: "插播阶段",
-    effect: "全场除你之外，所有人各摸 1 张新牌。",
-    mode: "special",
-    special: "everyoneElseDraw",
-    tags: ["instant"],
-  },
-  {
-    key: "cybernetic-implant",
-    tier: "silver",
-    name: "源计划植入",
-    count: 3,
-    type: "被动",
-    timing: "持续",
-    effect: "每次你喝酒自动减半，最少半杯。",
-    mode: "passive",
-    tags: ["passive"],
-  },
-  {
-    key: "pandoras-bench",
-    tier: "silver",
-    name: "潘朵拉的备战席",
-    count: 3,
-    type: "功能",
-    timing: "你的回合",
-    effect: "指定任意玩家，随机把他手里 1 张牌与牌堆中 1 张牌交换。",
-    mode: "special",
-    special: "pandoraSwap",
-    needsTarget: true,
-    tags: ["action"],
-  },
-  {
-    key: "dd-block",
-    tier: "silver",
-    name: "DD街区",
-    count: 3,
-    type: "理财",
-    timing: "回合开始",
-    effect: "放弃普通摸牌，从牌堆顶翻 2 张，选 1 张留下。",
-    mode: "action",
-    special: "ddBlock",
-    tags: ["action"],
-  },
-  {
-    key: "open-fort",
-    tier: "silver",
-    name: "开摆",
-    count: 2,
-    type: "摆烂",
-    timing: "插播阶段",
-    effect: "离桌 5 分钟免喝，回来后自罚 1 杯。",
-    mode: "discard",
-    tags: ["instant"],
-  },
-  {
-    key: "stand-united",
-    tier: "silver",
-    name: "并肩作战",
-    count: 3,
-    type: "被动",
-    timing: "持续",
-    effect: "当你被指定喝酒时，你左右两边的邻居必须陪你喝半杯。",
-    mode: "passive",
-    tags: ["passive"],
-  },
-  {
-    key: "second-wind",
-    tier: "silver",
-    name: "复苏之风",
-    count: 3,
-    type: "防御",
-    timing: "插播阶段",
-    effect: "本次少喝半杯；若你已连续喝了 2 次或以上，额外摸 1 张牌。",
-    mode: "defense",
-    tags: ["defense"],
-  },
-  {
-    key: "first-aid-kit",
-    tier: "silver",
-    name: "急救用具",
-    count: 2,
-    type: "救援",
-    timing: "插播阶段",
-    effect: "取消任意玩家本次半杯惩罚；如果救的是别人，你摸 1 张牌。",
-    mode: "special",
-    special: "firstAid",
-    needsTarget: true,
-    tags: ["instant"],
-  },
-  {
-    key: "salvage-bin",
-    tier: "silver",
-    name: "打捞桶",
-    count: 3,
-    type: "回收",
-    timing: "你的回合",
-    effect: "从弃牌堆随机回收 1 张银色或金色海克斯；弃牌堆为空则改为摸 1 张。",
-    mode: "special",
-    special: "salvage",
-    tags: ["action"],
-  },
-  {
-    key: "interest",
-    tier: "gold",
-    name: "利滚利",
-    count: 3,
-    type: "存蓄",
-    timing: "插播阶段",
-    effect: "把当前要喝的酒存起来。下一轮指定任意 1 人，让他双倍喝掉你存的酒。",
-    mode: "special",
-    special: "interest",
-    tags: ["instant"],
-  },
-  {
-    key: "two-star-pair",
-    tier: "gold",
-    name: "二星成双",
-    count: 3,
-    type: "攻击",
-    timing: "插播阶段",
-    effect: "指定 1 名玩家。接下来 2 轮里，他只要喝酒，分量必须翻倍。",
-    mode: "special",
-    special: "twoStarPair",
-    needsTarget: true,
-    tags: ["instant"],
-  },
-  {
-    key: "thieves-gloves",
-    tier: "gold",
-    name: "窃贼手套",
-    count: 3,
-    type: "偷窃",
-    timing: "插播阶段",
-    effect: "随机抽走指定玩家手里的 2 张牌。",
-    mode: "special",
-    special: "stealTwo",
-    needsTarget: true,
-    tags: ["instant"],
-  },
-  {
-    key: "metabolic-accelerator",
-    tier: "gold",
-    name: "代谢增速器",
-    count: 2,
-    type: "被动",
-    timing: "持续",
-    effect: "无条件跳过接下来的 3 次喝酒惩罚。",
-    mode: "passive",
-    tags: ["passive"],
-  },
-  {
-    key: "component-grab-bag",
-    tier: "gold",
-    name: "组件百宝袋",
-    count: 3,
-    type: "爆发",
-    timing: "你的回合",
-    effect: "立刻从牌堆连续抽 3 张牌；下轮你必须连喝 2 杯作为代价。",
-    mode: "special",
-    special: "drawThree",
-    tags: ["action"],
-  },
-  {
-    key: "demon-contract",
-    tier: "gold",
-    name: "恶魔契约",
-    count: 2,
-    type: "被动",
-    timing: "持续",
-    effect: "自己先干 1 杯。接下来 3 轮内，每轮限 1 次，随意指定任何人喝 1 杯。",
-    mode: "passive",
-    tags: ["passive"],
-  },
-  {
-    key: "last-stand",
-    tier: "gold",
-    name: "背水一战",
-    count: 2,
-    type: "被动",
-    timing: "持续",
-    effect: "全场所有人替你喝 1 杯，本局你彻底安全，不再被指定。",
-    mode: "passive",
-    tags: ["passive"],
-  },
-  {
-    key: "speculator-weapon",
-    tier: "gold",
-    name: "投机者武器",
-    count: 3,
-    type: "对决",
-    timing: "你的回合",
-    effect: "与指定玩家摇骰子。你赢了他喝 1 杯；你输了你喝 2 杯。",
-    mode: "special",
-    special: "diceDuel",
-    needsTarget: true,
-    tags: ["action"],
-  },
-  {
-    key: "mercenary-heart",
-    tier: "gold",
-    name: "赏金猎人之心",
-    count: 3,
-    type: "爆发",
-    timing: "插播阶段",
-    effect: "如果你已连续喝了 3 盘，打出此牌收菜：全场除你之外每人干 1 杯。",
-    mode: "special",
-    special: "mercenaryHeart",
-    tags: ["instant"],
-  },
-  {
-    key: "pharmacist",
-    tier: "gold",
-    name: "药剂师",
-    count: 2,
-    type: "被动",
-    timing: "持续",
-    effect: "当你把别人灌下 1 杯酒时，可免除自己下一次喝酒惩罚。",
-    mode: "passive",
-    tags: ["passive"],
-  },
-  {
-    key: "level-up",
-    tier: "prismatic",
-    name: "升级！",
-    count: 2,
-    type: "压制",
-    timing: "持续",
-    effect: "接下来 3 轮内，你说话就是规矩，谁插嘴或反驳直接喝半杯。",
-    mode: "passive",
-    tags: ["passive"],
-  },
-  {
-    key: "golden-ticket",
-    tier: "prismatic",
-    name: "黄金门票",
-    count: 2,
-    type: "被动",
-    timing: "持续",
-    effect: "你使用任何攻击或防御类卡牌时，有 50% 几率不消耗。",
-    mode: "passive",
-    tags: ["passive"],
-  },
-  {
-    key: "demon-lord",
-    tier: "prismatic",
-    name: "恶魔领主",
-    count: 2,
-    type: "降维",
-    timing: "你的回合",
-    effect: "指定 1 人。接下来 5 轮里，只要你喝酒，他必须陪同喝一模一样的分量。",
-    mode: "special",
-    special: "demonLord",
-    needsTarget: true,
-    tags: ["action"],
-  },
-  {
-    key: "prismatic-grab-bag",
-    tier: "prismatic",
-    name: "棱彩百宝袋",
-    count: 2,
-    type: "天神",
-    timing: "你的回合",
-    effect: "从剩余牌堆里挑选 3 张金色海克斯加入手牌。",
-    mode: "special",
-    special: "takeThreeGold",
-    tags: ["action"],
-  },
-  {
-    key: "divine-refresh",
-    tier: "prismatic",
-    name: "神圣刷新",
-    count: 2,
-    type: "洗牌",
-    timing: "插播阶段",
-    effect: "全场所有人手牌混在一起重新洗牌并重新平分。",
-    mode: "special",
-    special: "refreshHands",
-    tags: ["instant"],
-  },
-  {
-    key: "cursed-crown",
-    tier: "prismatic",
-    name: "诅咒冠冕",
-    count: 2,
-    type: "被动",
-    timing: "持续",
-    effect: "你受到的所有喝酒惩罚永远翻倍；但你每次喝酒都可以拉 1 人陪你喝同等分量。",
-    mode: "passive",
-    tags: ["passive"],
-  },
-  {
-    key: "radiant-armory",
-    tier: "prismatic",
-    name: "光明武器库",
-    count: 2,
-    type: "规矩",
-    timing: "摸到亮出",
-    effect: "现场临时胡编 1 条酒桌新规矩，违反者直接喝 1 杯，持续到游戏结束。",
-    mode: "rule",
-    tags: ["action"],
-  },
+  { key: "unyielding-will", tier: "silver", name: "不屈意志", count: 3, type: "盾", timing: "插播阶段", effect: "本轮内，你免疫任何人的劝酒或指定。", mode: "defense", tags: ["defense"] },
+  { key: "grab-bag", tier: "silver", name: "百宝袋", count: 3, type: "即时", timing: "插播阶段", effect: "全场除你之外，所有人各摸 1 张新牌。", mode: "special", special: "everyoneElseDraw", tags: ["instant"] },
+  { key: "cybernetic-implant", tier: "silver", name: "源计划植入", count: 3, type: "被动", timing: "持续", effect: "每次你喝酒自动减半，最少半杯。", mode: "passive", tags: ["passive"] },
+  { key: "pandoras-bench", tier: "silver", name: "潘朵拉的备战席", count: 3, type: "功能", timing: "你的回合", effect: "指定任意玩家，随机把他手里 1 张牌与牌堆中 1 张牌交换。", mode: "special", special: "pandoraSwap", needsTarget: true, tags: ["action"] },
+  { key: "dd-block", tier: "silver", name: "DD街区", count: 3, type: "理财", timing: "回合开始", effect: "放弃普通摸牌，从牌堆顶翻 2 张，选 1 张留下。", mode: "action", special: "ddBlock", tags: ["action"] },
+  { key: "open-fort", tier: "silver", name: "开摆", count: 2, type: "摆烂", timing: "插播阶段", effect: "离桌 5 分钟免喝，回来后自罚 1 杯。", mode: "discard", tags: ["instant"] },
+  { key: "stand-united", tier: "silver", name: "并肩作战", count: 3, type: "被动", timing: "持续", effect: "当你被指定喝酒时，你左右两边的邻居必须陪你喝半杯。", mode: "passive", tags: ["passive"] },
+  { key: "second-wind", tier: "silver", name: "复苏之风", count: 3, type: "防御", timing: "插播阶段", effect: "本次少喝半杯；若你已连续喝了 2 次或以上，额外摸 1 张牌。", mode: "defense", tags: ["defense"] },
+  { key: "first-aid-kit", tier: "silver", name: "急救用具", count: 2, type: "救援", timing: "插播阶段", effect: "取消任意玩家本次半杯惩罚；如果救的是别人，你摸 1 张牌。", mode: "special", special: "firstAid", needsTarget: true, tags: ["instant"] },
+  { key: "salvage-bin", tier: "silver", name: "打捞桶", count: 3, type: "回收", timing: "你的回合", effect: "从弃牌堆随机回收 1 张银色或金色海克斯；弃牌堆为空则改为摸 1 张。", mode: "special", special: "salvage", tags: ["action"] },
+  { key: "interest", tier: "gold", name: "利滚利", count: 3, type: "存蓄", timing: "插播阶段", effect: "把当前要喝的酒存起来。下一轮指定任意 1 人，让他双倍喝掉你存的酒。", mode: "special", special: "interest", tags: ["instant"] },
+  { key: "two-star-pair", tier: "gold", name: "二星成双", count: 3, type: "攻击", timing: "插播阶段", effect: "指定 1 名玩家。接下来 2 轮里，他只要喝酒，分量必须翻倍。", mode: "special", special: "twoStarPair", needsTarget: true, tags: ["instant"] },
+  { key: "thieves-gloves", tier: "gold", name: "窃贼手套", count: 3, type: "偷窃", timing: "插播阶段", effect: "随机抽走指定玩家手里的 2 张牌。", mode: "special", special: "stealTwo", needsTarget: true, tags: ["instant"] },
+  { key: "metabolic-accelerator", tier: "gold", name: "代谢增速器", count: 2, type: "被动", timing: "持续", effect: "无条件跳过接下来的 3 次喝酒惩罚。", mode: "passive", tags: ["passive"] },
+  { key: "component-grab-bag", tier: "gold", name: "组件百宝袋", count: 3, type: "爆发", timing: "你的回合", effect: "立刻从牌堆连续抽 3 张牌；下轮你必须连喝 2 杯作为代价。", mode: "special", special: "drawThree", tags: ["action"] },
+  { key: "demon-contract", tier: "gold", name: "恶魔契约", count: 2, type: "被动", timing: "持续", effect: "自己先干 1 杯。接下来 3 轮内，每轮限 1 次，随意指定任何人喝 1 杯。", mode: "passive", tags: ["passive"] },
+  { key: "last-stand", tier: "gold", name: "背水一战", count: 2, type: "被动", timing: "持续", effect: "全场所有人替你喝 1 杯，本局你彻底安全，不再被指定。", mode: "passive", tags: ["passive"] },
+  { key: "speculator-weapon", tier: "gold", name: "投机者武器", count: 3, type: "对决", timing: "你的回合", effect: "与指定玩家摇骰子。你赢了他喝 1 杯；你输了你喝 2 杯。", mode: "special", special: "diceDuel", needsTarget: true, tags: ["action"] },
+  { key: "mercenary-heart", tier: "gold", name: "赏金猎人之心", count: 3, type: "爆发", timing: "插播阶段", effect: "如果你已连续喝了 3 盘，打出此牌收菜：全场除你之外每人干 1 杯。", mode: "special", special: "mercenaryHeart", tags: ["instant"] },
+  { key: "pharmacist", tier: "gold", name: "药剂师", count: 2, type: "被动", timing: "持续", effect: "当你把别人灌下 1 杯酒时，可免除自己下一次喝酒惩罚。", mode: "passive", tags: ["passive"] },
+  { key: "level-up", tier: "prismatic", name: "升级！", count: 2, type: "压制", timing: "持续", effect: "接下来 3 轮内，你说话就是规矩，谁插嘴或反驳直接喝半杯。", mode: "passive", tags: ["passive"] },
+  { key: "golden-ticket", tier: "prismatic", name: "黄金门票", count: 2, type: "被动", timing: "持续", effect: "你使用任何攻击或防御类卡牌时，有 50% 几率不消耗。", mode: "passive", tags: ["passive"] },
+  { key: "demon-lord", tier: "prismatic", name: "恶魔领主", count: 2, type: "降维", timing: "你的回合", effect: "指定 1 人。接下来 5 轮里，只要你喝酒，他必须陪同喝一模一样的分量。", mode: "special", special: "demonLord", needsTarget: true, tags: ["action"] },
+  { key: "prismatic-grab-bag", tier: "prismatic", name: "棱彩百宝袋", count: 2, type: "天神", timing: "你的回合", effect: "从剩余牌堆里挑选 3 张金色海克斯加入手牌。", mode: "special", special: "takeThreeGold", tags: ["action"] },
+  { key: "divine-refresh", tier: "prismatic", name: "神圣刷新", count: 2, type: "洗牌", timing: "插播阶段", effect: "全场所有人手牌混在一起重新洗牌并重新平分。", mode: "special", special: "refreshHands", tags: ["instant"] },
+  { key: "cursed-crown", tier: "prismatic", name: "诅咒冠冕", count: 2, type: "被动", timing: "持续", effect: "你受到的所有喝酒惩罚永远翻倍；但你每次喝酒都可以拉 1 人陪你喝同等分量。", mode: "passive", tags: ["passive"] },
+  { key: "radiant-armory", tier: "prismatic", name: "光明武器库", count: 2, type: "规矩", timing: "摸到亮出", effect: "现场临时胡编 1 条酒桌新规矩，违反者直接喝 1 杯，持续到游戏结束。", mode: "rule", tags: ["action"] },
   { key: "magic-heist", tier: "silver", name: "魔盗团的致敬", count: 3, type: "搞怪", timing: "插播阶段", effect: "锁定一名玩家，必须双手摸耳朵喝完本轮惩罚，放手加注半杯。", mode: "discard", tags: ["instant"] },
   { key: "project-silence", tier: "silver", name: "源计划：静默", count: 3, type: "控制", timing: "插播阶段", effect: "全场进入静默状态，接下来前三个说话的人每人自罚一小口。", mode: "discard", tags: ["instant"] },
   { key: "lead-singer", tier: "silver", name: "主唱闪亮登场", count: 3, type: "社死", timing: "插播阶段", effect: "强制本轮输家必须用歌剧美声或动漫腔高喊'谢主隆恩'后才能喝酒。", mode: "discard", tags: ["instant"] },
@@ -378,7 +88,6 @@ const els = {
   menuJoinBtn: document.querySelector("#menuJoinBtn"),
   homeFormPanel: document.querySelector("#homeFormPanel"),
   homeModeTitle: document.querySelector("#homeModeTitle"),
-  homeModeHint: document.querySelector("#homeModeHint"),
   backMenuBtn: document.querySelector("#backMenuBtn"),
   createFields: document.querySelector("#createFields"),
   joinFields: document.querySelector("#joinFields"),
@@ -393,6 +102,7 @@ const els = {
   copyRoomBtn: document.querySelector("#copyRoomBtn"),
   leaveRoomBtn: document.querySelector("#leaveRoomBtn"),
   lobbyPlayers: document.querySelector("#lobbyPlayers"),
+  playerCount: document.querySelector("#playerCount"),
   roomNameInput: document.querySelector("#roomNameInput"),
   roomPasswordInput: document.querySelector("#roomPasswordInput"),
   clearPasswordInput: document.querySelector("#clearPasswordInput"),
@@ -401,33 +111,32 @@ const els = {
   maxDrinksInput: document.querySelector("#maxDrinksInput"),
   saveSettingsBtn: document.querySelector("#saveSettingsBtn"),
   startRoomGameBtn: document.querySelector("#startRoomGameBtn"),
-  gameRoomInfo: document.querySelector("#gameRoomInfo"),
-  turnPermissionHint: document.querySelector("#turnPermissionHint"),
-  backLobbyBtn: document.querySelector("#backLobbyBtn"),
-  newGameBtn: document.querySelector("#newGameBtn"),
   roundStat: document.querySelector("#roundStat"),
   deckStat: document.querySelector("#deckStat"),
   discardStat: document.querySelector("#discardStat"),
   playerList: document.querySelector("#playerList"),
-  turnBanner: document.querySelector("#turnBanner"),
+  turnPermissionHint: document.querySelector("#turnPermissionHint"),
+  backLobbyBtn: document.querySelector("#backLobbyBtn"),
+  currentPlayerName: document.querySelector("#currentPlayerName"),
   targetSelect: document.querySelector("#targetSelect"),
+  handTitle: document.querySelector("#handTitle"),
+  handLimitLabel: document.querySelector("#handLimitLabel"),
+  handCards: document.querySelector("#handCards"),
+  activeList: document.querySelector("#activeList"),
+  logDrawer: document.querySelector("#logDrawer"),
+  logList: document.querySelector("#logList"),
+  clearLogBtn: document.querySelector("#clearLogBtn"),
   drawBtn: document.querySelector("#drawBtn"),
   drinkDrawBtn: document.querySelector("#drinkDrawBtn"),
   nextTurnBtn: document.querySelector("#nextTurnBtn"),
-  confirmEventBtn: document.querySelector("#confirmEventBtn"),
   ddBtn: document.querySelector("#ddBtn"),
   shuffleDiscardBtn: document.querySelector("#shuffleDiscardBtn"),
   toggleLibraryBtn: document.querySelector("#toggleLibraryBtn"),
   eventBtn: document.querySelector("#eventBtn"),
-  handLimitLabel: document.querySelector("#handLimitLabel"),
-  handTitle: document.querySelector("#handTitle"),
-  handCards: document.querySelector("#handCards"),
-  activeList: document.querySelector("#activeList"),
-  ruleList: document.querySelector("#ruleList"),
-  logList: document.querySelector("#logList"),
-  clearLogBtn: document.querySelector("#clearLogBtn"),
+  confirmEventBtn: document.querySelector("#confirmEventBtn"),
   libraryPanel: document.querySelector("#libraryPanel"),
   libraryGrid: document.querySelector("#libraryGrid"),
+  closeLibraryBtn: document.querySelector("#closeLibraryBtn"),
   toast: document.querySelector("#toast"),
   countdownOverlay: document.querySelector("#countdownOverlay"),
   countdownTimer: document.querySelector("#countdownTimer"),
@@ -462,25 +171,37 @@ els.nicknameInput.value = profile.name;
 bindEvents();
 render();
 initRealtime();
+init3DTilt();
 
 async function initRealtime() {
   try {
     realtime = await createRealtimeClient();
-    console.log("realtime initialized:", realtime.configured, realtime.uid ? realtime.uid.slice(0, 20) : "");
     if (realtime.configured) {
       session.clientId = realtime.uid;
-      els.connectionStatus.textContent = "离线模式（本地测试）";
+      els.connectionStatus.textContent = "联机服务已连接";
       els.connectionStatus.classList.add("ready");
     } else {
-      els.connectionStatus.textContent = "未配置联机服务";
+      els.connectionStatus.textContent = "离线模式";
       els.connectionStatus.classList.remove("ready");
     }
   } catch (error) {
-    console.error("initRealtime error:", error);
     realtime = { configured: false, reason: `初始化失败：${error.message}` };
     els.connectionStatus.textContent = "连接失败";
   }
   render();
+}
+
+function init3DTilt() {
+  const cards = document.querySelectorAll(".hex-card");
+  if (window.DeviceOrientationEvent) {
+    window.addEventListener("deviceorientation", (e) => {
+      const tiltX = e.gamma / 20;
+      const tiltY = e.beta / 20;
+      cards.forEach((card) => {
+        card.style.transform = `perspective(1000px) rotateY(${tiltX}deg) rotateX(${-tiltY}deg)`;
+      });
+    });
+  }
 }
 
 function createEmptyState() {
@@ -605,6 +326,39 @@ function normalizeSettings(s = {}) {
   };
 }
 
+function normalizeStatePlayers() {
+  if (!state.players) return;
+  state.players.forEach((p) => {
+    p.hexDoublePenalty = p.hexDoublePenalty || false;
+    p.hexShieldCharges = p.hexShieldCharges || 0;
+    p.hexLifesteal = p.hexLifesteal || false;
+    p.hexCursed = p.hexCursed || false;
+    p.hexLucky = p.hexLucky || false;
+    p.hexVengeance = p.hexVengeance || false;
+    p.hexBloodContract = p.hexBloodContract || false;
+    p.hexLuckyStar = p.hexLuckyStar || false;
+    p.hexDemonPays = p.hexDemonPays || false;
+    p.hexBountyForesight = p.hexBountyForesight || false;
+    p.bountyRefusals = p.bountyRefusals || 0;
+    p.hexStandUnitedPain = p.hexStandUnitedPain || false;
+    p.storedDrink = p.storedDrink || 0;
+    p.doubleRoundsLeft = p.doubleRoundsLeft || 0;
+    p.skipCount = p.skipCount || 0;
+    p.demonContractRoundsLeft = p.demonContractRoundsLeft || 0;
+    p.demonContractUsesLeft = p.demonContractUsesLeft || 0;
+    p.demonLordTargetId = p.demonLordTargetId || "";
+    p.demonLordRoundsLeft = p.demonLordRoundsLeft || 0;
+    p.lastStandUsed = p.lastStandUsed || false;
+    p.remainingDrinks = p.remainingDrinks ?? (p.maxDrinks || DEFAULT_MAX_DRINKS);
+    p.maxDrinks = p.maxDrinks || DEFAULT_MAX_DRINKS;
+    p.drinkCount = p.drinkCount || 0;
+    p.consecutiveDrinks = p.consecutiveDrinks || 0;
+    p.isOut = p.isOut || false;
+    p.hand = p.hand || [];
+    p.active = p.active || [];
+  });
+}
+
 function loadProfile() {
   try {
     const saved = JSON.parse(localStorage.getItem(PROFILE_KEY) || "{}");
@@ -620,7 +374,6 @@ function saveProfile() {
 
 function getNickname() {
   const name = els.nicknameInput.value.trim().slice(0, 10);
-  console.log("getNickname input value:", name);
   if (!name) { showToast("先给自己起个昵称。"); return ""; }
   session.playerName = name;
   saveProfile();
@@ -628,10 +381,8 @@ function getNickname() {
 }
 
 async function createRoomFlow() {
-  console.log("createRoomFlow called, realtime.configured:", realtime.configured);
-  if (!ensureRealtime()) { console.log("ensureRealtime returned false"); return; }
+  if (!ensureRealtime()) return;
   const name = getNickname();
-  console.log("getNickname returned:", name);
   if (!name) return;
   setBusy(true);
   try {
@@ -673,44 +424,8 @@ async function joinRoomFlow() {
   finally { setBusy(false); }
 }
 
-function normalizeStatePlayers() {
-  if (!state.players) return;
-  state.players.forEach((p) => {
-    p.hexDoublePenalty = p.hexDoublePenalty || false;
-    p.hexShieldCharges = p.hexShieldCharges || 0;
-    p.hexLifesteal = p.hexLifesteal || false;
-    p.hexCursed = p.hexCursed || false;
-    p.hexLucky = p.hexLucky || false;
-    p.hexVengeance = p.hexVengeance || false;
-    p.hexBloodContract = p.hexBloodContract || false;
-    p.hexLuckyStar = p.hexLuckyStar || false;
-    p.hexDemonPays = p.hexDemonPays || false;
-    p.hexBountyForesight = p.hexBountyForesight || false;
-    p.bountyRefusals = p.bountyRefusals || 0;
-    p.hexStandUnitedPain = p.hexStandUnitedPain || false;
-    p.storedDrink = p.storedDrink || 0;
-    p.doubleRoundsLeft = p.doubleRoundsLeft || 0;
-    p.skipCount = p.skipCount || 0;
-    p.demonContractRoundsLeft = p.demonContractRoundsLeft || 0;
-    p.demonContractUsesLeft = p.demonContractUsesLeft || 0;
-    p.demonLordTargetId = p.demonLordTargetId || "";
-    p.demonLordRoundsLeft = p.demonLordRoundsLeft || 0;
-    p.lastStandUsed = p.lastStandUsed || false;
-    p.remainingDrinks = p.remainingDrinks ?? (p.maxDrinks || DEFAULT_MAX_DRINKS);
-    p.maxDrinks = p.maxDrinks || DEFAULT_MAX_DRINKS;
-    p.drinkCount = p.drinkCount || 0;
-    p.consecutiveDrinks = p.consecutiveDrinks || 0;
-    p.isOut = p.isOut || false;
-    p.hand = p.hand || [];
-    p.active = p.active || [];
-  });
-}
-
 async function enterRoom(code) {
-  if (session.unsubscribe) {
-    session.unsubscribe();
-    session.unsubscribe = null;
-  }
+  if (session.unsubscribe) { session.unsubscribe(); session.unsubscribe = null; }
   session.roomCode = code;
   session.unsubscribe = realtime.subscribeRoom(code, (room) => {
     if (!room) { showToast("房间已不存在。"); resetSessionToHome(); return; }
@@ -769,21 +484,13 @@ async function returnToLobby() {
 }
 
 function currentPlayer() { return state.players[state.currentIndex]; }
-
 function viewerPlayer() { return state.players.find((p) => p.id === session.clientId) || currentPlayer(); }
-
 function targetPlayer() { return state.players.find((p) => p.id === state.selectedTargetId) || null; }
-
 function getPlayerById(id) { return state.players.find((p) => p.id === id); }
-
 function handLimit() { return clamp(Number(state.settings?.handLimit) || DEFAULT_HAND_LIMIT, 3, 8); }
-
 function isCurrentActor() { if (!session.roomCode) return true; return currentPlayer()?.id === session.clientId; }
-
 function ensureActor() { if (isCurrentActor()) return true; const p = currentPlayer(); showToast(p ? `现在轮到 ${p.name}。` : "还没有开始游戏。"); return false; }
-
 function isInCountdown() { return state.phase === "countdown"; }
-
 function canActInCountdown() { return isInCountdown() && state.countdownEndsAt > Date.now(); }
 
 function drawCard(player = currentPlayer(), count = 1, options = {}) {
@@ -810,6 +517,8 @@ function drawForCurrent(reason = "摸牌") {
   showToast("本回合行动结束，点击「下一位」继续。");
   commitGame();
 }
+
+let countdownInterval = null;
 
 function triggerEvent() {
   if (!ensureActor()) return;
@@ -1152,45 +861,6 @@ function useCardInCountdown(cardUid) {
   commitGame();
 }
 
-function checkHexChoiceTrigger() {
-  if (state.round > 1 && state.round % HEX_CHOICE_INTERVAL === 0 && state.hexChoiceRound < state.round) {
-    state.hexChoiceRound = state.round;
-    const shuffled = shuffle([...HEX_CHOICES_POOL]);
-    state.hexChoices = shuffled.slice(0, 3).map((h, i) => ({ ...h, choiceId: `hex-${cryptoRandomId()}-${i}` }));
-    state.phase = "hexChoice";
-    addLog(`🔮 海克斯强化轮！请选择一个被动效果。`);
-    commitGame();
-    showHexChoice();
-  }
-}
-
-function selectHexChoice(choiceId) {
-  const viewer = viewerPlayer();
-  const choice = state.hexChoices.find((c) => c.choiceId === choiceId);
-  if (!choice) return;
-  const def = HEX_CHOICES_POOL.find((h) => h.key === choice.key);
-  if (!def) return;
-  def.apply(viewer);
-  addLog(`${viewer.name} 选择了海克斯「${choice.name}」：${choice.effect}`);
-  state.hexChoices = [];
-  state.phase = "normal";
-  commitGame();
-  hideHexChoice();
-  showToast(`获得海克斯：${choice.name}`);
-}
-
-function showHexChoice() {
-  if (!els.hexChoiceOverlay || !els.hexChoiceCards) return;
-  els.hexChoiceCards.innerHTML = state.hexChoices.map((c) => `<button class="hex-choice-card" data-hex-choice="${c.choiceId}"><h3>${escapeHtml(c.name)}</h3><p>${escapeHtml(c.effect)}</p></button>`).join("");
-  els.hexChoiceOverlay.classList.add("show");
-}
-
-function hideHexChoice() { if (els.hexChoiceOverlay) els.hexChoiceOverlay.classList.remove("show"); }
-
-function showResolution(text) {
-  if (els.resolutionOverlay) { els.resolutionText.textContent = text; els.resolutionOverlay.classList.add("show"); setTimeout(() => { els.resolutionOverlay.classList.remove("show"); }, 6000); }
-}
-
 function useCard(cardUid) {
   if (!ensureActor()) return;
   if (state.actionTaken) { showToast("本回合已行动过，请等待下一位。"); return; }
@@ -1391,6 +1061,45 @@ function resolveSpecialCard(player, card) {
   }
 }
 
+function checkHexChoiceTrigger() {
+  if (state.round > 1 && state.round % HEX_CHOICE_INTERVAL === 0 && state.hexChoiceRound < state.round) {
+    state.hexChoiceRound = state.round;
+    const shuffled = shuffle([...HEX_CHOICES_POOL]);
+    state.hexChoices = shuffled.slice(0, 3).map((h, i) => ({ ...h, choiceId: `hex-${cryptoRandomId()}-${i}` }));
+    state.phase = "hexChoice";
+    addLog(`🔮 海克斯强化轮！请选择一个被动效果。`);
+    commitGame();
+    showHexChoice();
+  }
+}
+
+function selectHexChoice(choiceId) {
+  const viewer = viewerPlayer();
+  const choice = state.hexChoices.find((c) => c.choiceId === choiceId);
+  if (!choice) return;
+  const def = HEX_CHOICES_POOL.find((h) => h.key === choice.key);
+  if (!def) return;
+  def.apply(viewer);
+  addLog(`${viewer.name} 选择了海克斯「${choice.name}」：${choice.effect}`);
+  state.hexChoices = [];
+  state.phase = "normal";
+  commitGame();
+  hideHexChoice();
+  showToast(`获得海克斯：${choice.name}`);
+}
+
+function showHexChoice() {
+  if (!els.hexChoiceOverlay || !els.hexChoiceCards) return;
+  els.hexChoiceCards.innerHTML = state.hexChoices.map((c) => `<button class="hex-choice-card" data-hex-choice="${c.choiceId}"><h3>${escapeHtml(c.name)}</h3><p>${escapeHtml(c.effect)}</p></button>`).join("");
+  els.hexChoiceOverlay.classList.add("show");
+}
+
+function hideHexChoice() { if (els.hexChoiceOverlay) els.hexChoiceOverlay.classList.remove("show"); }
+
+function showResolution(text) {
+  if (els.resolutionOverlay) { els.resolutionText.textContent = text; els.resolutionOverlay.classList.add("show"); setTimeout(() => { els.resolutionOverlay.classList.remove("show"); }, 6000); }
+}
+
 function nextTurn() {
   if (!ensureActor()) return;
   if (isInCountdown()) { showToast("插播倒计时进行中，请等待结算。"); return; }
@@ -1498,10 +1207,10 @@ function renderHome() {
   els.homePanel.hidden = inRoom;
   els.lobbyPanel.hidden = !inRoom || session.room?.phase === "playing";
   els.gamePanel.hidden = !inRoom || session.room?.phase !== "playing" || !state.started;
-  els.libraryPanel.hidden = !inRoom || !libraryVisible;
+  els.libraryPanel.hidden = true;
 
-  if (realtime.configured) { els.connectionStatus.textContent = "离线模式（本地测试）"; els.serviceWarning.innerHTML = ""; }
-  else { els.connectionStatus.textContent = "未配置联机服务"; els.serviceWarning.innerHTML = ""; }
+  if (realtime.configured) { els.connectionStatus.textContent = "联机服务已连接"; els.connectionStatus.classList.add("ready"); }
+  else { els.connectionStatus.textContent = "离线模式"; els.connectionStatus.classList.remove("ready"); }
   if (els.createRoomBtn) els.createRoomBtn.disabled = !realtime.configured || session.busy;
   if (els.joinRoomBtn) els.joinRoomBtn.disabled = !realtime.configured || session.busy;
   els.menuCreateBtn.disabled = session.busy;
@@ -1512,8 +1221,8 @@ function renderHome() {
   els.createFields.hidden = homeMode !== "create";
   els.joinFields.hidden = homeMode !== "join";
 
-  if (homeMode === "create") { els.homeModeTitle.textContent = "创建全新房间"; els.homeModeHint.textContent = "生成 6 位房号，邀请朋友进入同一局。"; }
-  else if (homeMode === "join") { els.homeModeTitle.textContent = "输入房号加入"; els.homeModeHint.textContent = "向房主要房号和密码，然后加入牌局。"; }
+  if (homeMode === "create") { els.homeModeTitle.textContent = "创建房间"; }
+  else if (homeMode === "join") { els.homeModeTitle.textContent = "加入房间"; }
 }
 
 function renderLobby() {
@@ -1524,7 +1233,9 @@ function renderLobby() {
 
   els.lobbyRoomTitle.textContent = settings.roomName;
   els.lobbyRoomCode.textContent = room.code;
-  els.lobbyPlayers.innerHTML = players.map((p) => `<article class="lobby-player ${p.online === false ? "offline" : ""}"><span class="seat-avatar">${escapeHtml(p.name.slice(0, 1))}</span><div><strong>${escapeHtml(p.name)}${p.id === session.clientId ? "（我）" : ""}</strong><span>${p.id === room.hostId ? "房主" : `座位 ${p.seat + 1}`} · ${p.online === false ? "离线" : "在线"}</span></div></article>`).join("");
+  if (els.playerCount) els.playerCount.textContent = players.length;
+
+  els.lobbyPlayers.innerHTML = players.map((p) => `<div class="lobby-player ${p.online === false ? "offline" : ""}"><span class="seat-avatar">${escapeHtml(p.name.slice(0, 1))}</span><strong>${escapeHtml(p.name)}${p.id === session.clientId ? "（我）" : ""}</strong><span>${p.id === room.hostId ? "房主" : `座位 ${p.seat + 1}`} · ${p.online === false ? "离线" : "在线"}</span></div>`).join("");
 
   els.roomNameInput.value = settings.roomName;
   els.initialHandInput.value = settings.initialHand;
@@ -1538,7 +1249,7 @@ function renderLobby() {
   [els.roomNameInput, els.roomPasswordInput, els.clearPasswordInput, els.initialHandInput, els.handLimitInput, els.maxDrinksInput].forEach((i) => { i.disabled = disabled; });
   els.saveSettingsBtn.disabled = disabled;
   els.startRoomGameBtn.disabled = disabled || players.filter((p) => p.online !== false).length < 2;
-  els.startRoomGameBtn.textContent = session.isHost ? "房主开始游戏" : "等待房主开始";
+  els.startRoomGameBtn.textContent = session.isHost ? "开始游戏" : "等待房主开始";
 }
 
 function renderGame() {
@@ -1546,52 +1257,30 @@ function renderGame() {
   const player = currentPlayer();
   const viewer = viewerPlayer();
   const canAct = isCurrentActor();
-  const settings = normalizeSettings(session.room.settings);
-
-  els.gameRoomInfo.textContent = `${settings.roomName} · 房号 ${session.room.code}`;
-
-  if (isInCountdown()) {
-    els.turnPermissionHint.textContent = `⚡ 插播阶段！${Math.max(0, Math.ceil((state.countdownEndsAt - Date.now()) / 1000))}s`;
-    els.turnPermissionHint.classList.add("countdown-active");
-  } else {
-    els.turnPermissionHint.textContent = canAct ? "轮到你行动" : `等待 ${player.name}`;
-    els.turnPermissionHint.classList.remove("countdown-active");
-  }
-
-  els.roundStat.textContent = `第 ${state.round} 轮`;
-  els.deckStat.textContent = String(state.deck.length);
-  els.discardStat.textContent = String(state.discard.length);
-  els.handLimitLabel.textContent = `手牌上限 ${handLimit()}`;
-
-  if (state.currentEvent) {
-    els.turnBanner.innerHTML = `<div><p class="eyebrow">${state.phase === "countdown" ? "⚡ 插播倒计时" : "📢 命运事件"}</p><h2>${escapeHtml(state.currentEvent.displayText || "")}</h2></div><span>${state.phase === "countdown" ? "打出手牌影响结果！" : "等待结算"}</span>`;
-  } else {
-    const target = targetPlayer();
-    els.turnBanner.innerHTML = `<div><p class="eyebrow">当前行动</p><h2>${escapeHtml(player.name)}</h2></div><div class="table-center-stack" aria-hidden="true"><span></span><span></span><span></span></div><span>${target ? `锁定 ${escapeHtml(target.name)}` : "请选择目标"}</span>`;
-  }
-
-  els.handTitle.textContent = canAct ? `${viewer.name} 的手牌${hasActed ? "（已行动）" : ""}` : `你的手牌（等待 ${player.name}）`;
-
+  const hasActed = state.actionTaken;
   const inCountdown = isInCountdown();
   const isEventChoose = state.phase === "eventChoose";
-  const hasActed = state.actionTaken;
+
+  els.roundStat.textContent = `R${state.round}`;
+  els.deckStat.textContent = String(state.deck.length);
+  els.discardStat.textContent = String(state.discard.length);
+
+  els.turnPermissionHint.textContent = inCountdown ? `⚡ 插播 ${Math.max(0, Math.ceil((state.countdownEndsAt - Date.now()) / 1000))}s` : (canAct ? "轮到你行动" : `等待 ${player.name}`);
+
+  els.currentPlayerName.textContent = player.name;
+  els.handTitle.textContent = canAct ? `${viewer.name} 的手牌${hasActed ? "（已行动）" : ""}` : `你的手牌（等待 ${player.name}）`;
+  els.handLimitLabel.textContent = `上限 ${handLimit()}`;
+
   [els.targetSelect, els.ddBtn, els.shuffleDiscardBtn].forEach((c) => { c.disabled = !canAct || inCountdown || isEventChoose || hasActed; });
   if (els.eventBtn) els.eventBtn.disabled = !canAct || inCountdown || isEventChoose || hasActed;
   if (els.drinkDrawBtn) els.drinkDrawBtn.disabled = !canAct || inCountdown;
   if (els.drawBtn) els.drawBtn.disabled = true;
-  if (els.confirmEventBtn) {
-    els.confirmEventBtn.hidden = !isEventChoose || !canAct;
-    els.confirmEventBtn.disabled = !canAct;
-  }
   if (els.nextTurnBtn) els.nextTurnBtn.disabled = !canAct || !hasActed || inCountdown;
-  els.newGameBtn.disabled = !session.isHost;
-  els.newGameBtn.textContent = session.isHost ? "重开" : "房主可重开";
 
   renderPlayers();
   renderTargetSelect();
   renderHand(canAct && !inCountdown ? player : viewer, canAct || inCountdown);
   renderActive();
-  renderRules();
   renderLog();
 }
 
@@ -1600,7 +1289,7 @@ function renderPlayers() {
     const isCurrent = i === state.currentIndex;
     const hpPercent = Math.round((p.remainingDrinks / p.maxDrinks) * 100);
     const hpColor = hpPercent > 60 ? "#22c55e" : hpPercent > 30 ? "#f59e0b" : "#ef4444";
-    return `<article class="player-card ${isCurrent ? "current" : ""} ${p.isOut ? "eliminated" : ""}">
+    return `<div class="player-card ${isCurrent ? "current" : ""} ${p.isOut ? "eliminated" : ""}">
       <button class="player-main" data-switch-player="${i}" type="button" ${session.isHost ? "" : "disabled"}>
         <span class="seat-avatar">${escapeHtml(p.name.slice(0, 1))}</span>
         <span class="seat-copy">
@@ -1612,10 +1301,8 @@ function renderPlayers() {
       <div class="player-metrics">
         <span>❤️ ${p.remainingDrinks}/${p.maxDrinks}</span>
         <span>${p.hand.length} 手牌</span>
-        <span>${p.active.length} 被动</span>
       </div>
-      <button class="ghost-button mini" data-drink-player="${p.id}" type="button">记一杯</button>
-    </article>`;
+    </div>`;
   }).join("");
 }
 
@@ -1634,29 +1321,24 @@ function renderCard(card, options = {}) {
   const meta = TIER_META[card.tier];
   const actionLabel = card.mode === "passive" ? "激活" : card.mode === "rule" ? "立规矩" : card.mode === "defense" ? "防御" : "打出";
   const action = options.actionable ? `<button class="card-action" data-use-card="${card.uid}" type="button">${actionLabel}</button>` : "";
-  return `<article class="hex-card ${meta.className}"><div class="card-topline"><span class="tier-mark">${meta.short}</span><span>${escapeHtml(card.type)}</span></div><div class="card-sigil" aria-hidden="true">${meta.short}</div><h3>${escapeHtml(card.name)}</h3><p class="timing">${escapeHtml(card.timing)}</p><p class="effect">${escapeHtml(card.effect)}</p>${action}</article>`;
+  return `<div class="hex-card ${meta.className}"><div class="card-topline"><span class="tier-mark">${meta.short}</span><span>${escapeHtml(card.type)}</span></div><h3>${escapeHtml(card.name)}</h3><p class="timing">${escapeHtml(card.timing)}</p><p class="effect">${escapeHtml(card.effect)}</p>${action}</div>`;
 }
 
 function renderActive() {
   const viewer = viewerPlayer();
   const activeCards = viewer.active.map((card) => ({ player: viewer, card }));
   if (!activeCards.length) { els.activeList.innerHTML = `<div class="empty-state">还没有持续效果。</div>`; return; }
-  els.activeList.innerHTML = activeCards.map(({ player, card }) => `<article class="active-chip ${TIER_META[card.tier].className}"><div><strong>${escapeHtml(card.name)}</strong><span>${escapeHtml(player.name)} · ${escapeHtml(card.type)}</span></div><button data-remove-active="${player.id}:${card.uid}" type="button">结束</button></article>`).join("");
-}
-
-function renderRules() {
-  if (!state.rules.length) { els.ruleList.innerHTML = `<div class="empty-state compact-empty">暂无自定义规则。</div>`; return; }
-  els.ruleList.innerHTML = state.rules.map((r) => `<article class="rule-card"><strong>${escapeHtml(r.text)}</strong><span>${escapeHtml(r.owner)} 通过「${escapeHtml(r.cardName)}」设定</span></article>`).join("");
+  els.activeList.innerHTML = activeCards.map(({ player, card }) => `<div class="active-chip ${TIER_META[card.tier].className}"><strong>${escapeHtml(card.name)}</strong><span>${escapeHtml(player.name)} · ${escapeHtml(card.type)}</span></div>`).join("");
 }
 
 function renderLog() {
-  if (!state.log.length) { els.logList.innerHTML = `<div class="empty-state compact-empty">日志会记录关键操作。</div>`; return; }
-  els.logList.innerHTML = state.log.map((item) => `<article class="log-item"><time>${escapeHtml(item.time)}</time><span>${escapeHtml(item.message)}</span></article>`).join("");
+  if (!state.log.length) { els.logList.innerHTML = `<div class="empty-state">日志会记录关键操作。</div>`; return; }
+  els.logList.innerHTML = state.log.map((item) => `<div class="log-item"><time>${escapeHtml(item.time)}</time><span>${escapeHtml(item.message)}</span></div>`).join("");
 }
 
 function renderLibrary() {
   const cards = CARD_DEFINITIONS.filter((c) => libraryFilter === "all" || c.tier === libraryFilter).sort(compareDefinitions);
-  els.libraryGrid.innerHTML = cards.map((card) => { const meta = TIER_META[card.tier]; return `<article class="library-card ${meta.className}"><div class="library-card-head"><span>${meta.label}</span><b>×${card.count}</b></div><h3>${escapeHtml(card.name)}</h3><p>${escapeHtml(card.type)} · ${escapeHtml(card.timing)}</p><span>${escapeHtml(card.effect)}</span></article>`; }).join("");
+  els.libraryGrid.innerHTML = cards.map((card) => { const meta = TIER_META[card.tier]; return `<div class="library-card ${meta.className}"><div class="library-card-head"><span>${meta.label}</span><b>×${card.count}</b></div><h3>${escapeHtml(card.name)}</h3><p>${escapeHtml(card.type)} · ${escapeHtml(card.timing)}</p><span>${escapeHtml(card.effect)}</span></div>`; }).join("");
 }
 
 function bindEvents() {
@@ -1672,7 +1354,6 @@ function bindEvents() {
   els.backLobbyBtn.addEventListener("click", returnToLobby);
   els.saveSettingsBtn.addEventListener("click", saveRoomSettings);
   els.startRoomGameBtn.addEventListener("click", startRoomGame);
-  els.newGameBtn.addEventListener("click", returnToLobby);
 
   els.targetSelect.addEventListener("change", (e) => { if (state.phase === "eventChoose") { state.selectedTargetId = e.target.value; commitGame(); } else if (!ensureActor()) { render(); return; } else { state.selectedTargetId = e.target.value; commitGame(); } });
 
@@ -1698,14 +1379,15 @@ function bindEvents() {
   if (els.eventBtn) els.eventBtn.addEventListener("click", triggerEvent);
   if (els.confirmEventBtn) els.confirmEventBtn.addEventListener("click", confirmEventTarget);
 
-  els.toggleLibraryBtn.addEventListener("click", () => { libraryVisible = !libraryVisible; els.toggleLibraryBtn.textContent = libraryVisible ? "隐藏卡库" : "查看卡库"; render(); });
+  els.toggleLibraryBtn.addEventListener("click", () => { els.libraryPanel.hidden = false; });
+  if (els.closeLibraryBtn) els.closeLibraryBtn.addEventListener("click", () => { els.libraryPanel.hidden = true; });
 
-  els.handCards.addEventListener("click", (e) => { const uid = e.target.dataset.useCard; if (uid) useCard(uid); });
-  els.activeList.addEventListener("click", (e) => { const payload = e.target.dataset.removeActive; if (!payload) return; const [pid, uid] = payload.split(":"); removeActiveCard(pid, uid); });
+  els.handCards.addEventListener("click", (e) => { const uid = e.target.closest("[data-use-card]")?.dataset.useCard; if (uid) useCard(uid); });
+  els.activeList.addEventListener("click", (e) => { const payload = e.target.closest("[data-remove-active]")?.dataset.removeActive; if (!payload) return; const [pid, uid] = payload.split(":"); removeActiveCard(pid, uid); });
   els.playerList.addEventListener("click", (e) => {
     const si = e.target.closest("[data-switch-player]")?.dataset.switchPlayer;
     if (si !== undefined && session.isHost) { state.currentIndex = Number(si); state.selectedTargetId = state.players.find((p) => p.id !== currentPlayer().id)?.id || currentPlayer().id; commitGame(); return; }
-    const did = e.target.dataset.drinkPlayer;
+    const did = e.target.closest("[data-drink-player]")?.dataset.drinkPlayer;
     if (did) markDrink(did);
   });
 
@@ -1713,39 +1395,21 @@ function bindEvents() {
 }
 
 function createRoomPlayer(name, seat) { return { id: session.clientId, name, seat, online: true, joinedAt: Date.now(), lastSeen: Date.now() }; }
-
 function roomPlayers(room) { return Object.values(room?.players || {}).sort((a, b) => (a.seat ?? 0) - (b.seat ?? 0) || (a.joinedAt ?? 0) - (b.joinedAt ?? 0)); }
-
 function ensureRealtime() { if (realtime.configured) return true; showToast(realtime.reason || "联机服务未配置。"); return false; }
-
 function ensureHost() { if (session.isHost) return true; showToast("只有房主可以操作。"); return false; }
-
 function setBusy(b) { session.busy = b; render(); }
-
 function generateRoomCode() { return String(Math.floor(100000 + Math.random() * 900000)); }
-
 function normalizeRoomCode(v) { return String(v).replace(/\D/g, "").slice(0, 6); }
-
 async function hashRoomPassword(code, pw) { if (!pw) return ""; const input = `${code}:${pw}`; if (window.crypto?.subtle) { const bytes = new TextEncoder().encode(input); const hash = await window.crypto.subtle.digest("SHA-256", bytes); return Array.from(new Uint8Array(hash), (b) => b.toString(16).padStart(2, "0")).join(""); } return btoa(unescape(encodeURIComponent(input))); }
-
 function cryptoRandomId() { if (window.crypto?.getRandomValues) { const v = new Uint32Array(2); window.crypto.getRandomValues(v); return Array.from(v, (x) => x.toString(36)).join(""); } return Math.random().toString(36).slice(2); }
-
 function shuffle(items) { const c = [...items]; for (let i = c.length - 1; i > 0; i -= 1) { const t = Math.floor(Math.random() * (i + 1)); [c[i], c[t]] = [c[t], c[i]]; } return c; }
-
 function randomIndex(items) { return Math.floor(Math.random() * items.length); }
-
 function compareCards(a, b) { return TIER_META[a.tier].order - TIER_META[b.tier].order || a.name.localeCompare(b.name, "zh-CN"); }
-
 function compareDefinitions(a, b) { return TIER_META[a.tier].order - TIER_META[b.tier].order || a.name.localeCompare(b.name, "zh-CN"); }
-
 function clamp(v, min, max) { return Math.min(max, Math.max(min, v)); }
-
 function shortTime() { return new Date().toLocaleTimeString("zh-CN", { hour: "2-digit", minute: "2-digit" }); }
-
 function showToast(msg) { els.toast.textContent = msg; els.toast.classList.add("show"); window.clearTimeout(showToast.timer); showToast.timer = window.setTimeout(() => { els.toast.classList.remove("show"); }, 2200); }
-
 function escapeHtml(v) { return String(v).replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#039;"); }
 
 els.hexChoiceCards?.addEventListener("click", (e) => { const btn = e.target.closest("[data-hex-choice]"); if (btn) selectHexChoice(btn.dataset.hexChoice); });
-
-console.log("[app.js] module loaded, els.createRoomBtn:", els.createRoomBtn ? "found" : "NOT FOUND");
