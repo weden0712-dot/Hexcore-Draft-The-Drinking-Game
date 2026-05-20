@@ -182,7 +182,7 @@ async function initRealtime() {
     realtime = await createRealtimeClient();
     console.log("[app.js] Realtime client created, configured:", realtime.configured, "uid:", realtime.uid);
     if (realtime.configured) {
-      session.clientId = realtime.uid;
+      console.log("[app.js] Using local clientId:", session.clientId);
     } else {
       console.warn("[app.js] Realtime client not configured");
     }
@@ -351,15 +351,23 @@ function normalizeStatePlayers() {
 
 function loadProfile() {
   try {
-    const saved = JSON.parse(localStorage.getItem(PROFILE_KEY) || "{}");
-    return { clientId: saved.clientId || `guest-${cryptoRandomId()}`, name: saved.name || `弈手${Math.floor(100 + Math.random() * 900)}` };
+    const sessionSaved = JSON.parse(sessionStorage.getItem("drink-tactics-session") || "{}");
+    const localSaved = JSON.parse(localStorage.getItem(PROFILE_KEY) || "{}");
+    const clientId = sessionSaved.clientId || `guest-${cryptoRandomId()}`;
+    const name = localSaved.name || sessionSaved.name || `弈手${Math.floor(100 + Math.random() * 900)}`;
+    sessionStorage.setItem("drink-tactics-session", JSON.stringify({ clientId, name }));
+    return { clientId, name };
   } catch {
-    return { clientId: `guest-${cryptoRandomId()}`, name: `弈手${Math.floor(100 + Math.random() * 900)}` };
+    const clientId = `guest-${cryptoRandomId()}`;
+    const name = `弈手${Math.floor(100 + Math.random() * 900)}`;
+    sessionStorage.setItem("drink-tactics-session", JSON.stringify({ clientId, name }));
+    return { clientId, name };
   }
 }
 
 function saveProfile() {
-  localStorage.setItem(PROFILE_KEY, JSON.stringify({ clientId: session.clientId, name: session.playerName }));
+  localStorage.setItem(PROFILE_KEY, JSON.stringify({ name: session.playerName }));
+  sessionStorage.setItem("drink-tactics-session", JSON.stringify({ clientId: session.clientId, name: session.playerName }));
 }
 
 function getNickname() {
