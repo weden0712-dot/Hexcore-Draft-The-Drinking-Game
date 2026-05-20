@@ -567,6 +567,7 @@ function startCountdown(event) {
   state.countdownCards = [];
   addLog(`⚡ 事件触发：${event.displayText} — ${COUNTDOWN_SECONDS}秒插播倒计时！`);
   commitGame();
+  if (els.countdownOverlay) els.countdownOverlay.classList.remove("hidden");
   startCountdownTimer();
 }
 
@@ -584,6 +585,7 @@ function startCountdownTimer() {
 }
 
 function resolveCountdown() {
+  if (els.countdownOverlay) els.countdownOverlay.classList.add("hidden");
   state.phase = "resolution";
   const event = state.currentEvent;
   if (!event) { state.phase = "normal"; commitGame(); return; }
@@ -1081,13 +1083,13 @@ function selectHexChoice(choiceId) {
 function showHexChoice() {
   if (!els.hexChoiceOverlay || !els.hexChoiceCards) return;
   els.hexChoiceCards.innerHTML = state.hexChoices.map((c) => `<button class="hex-choice-card" data-hex-choice="${c.choiceId}"><h3>${escapeHtml(c.name)}</h3><p>${escapeHtml(c.effect)}</p></button>`).join("");
-  els.hexChoiceOverlay.classList.add("show");
+  els.hexChoiceOverlay.classList.remove("hidden");
 }
 
-function hideHexChoice() { if (els.hexChoiceOverlay) els.hexChoiceOverlay.classList.remove("show"); }
+function hideHexChoice() { if (els.hexChoiceOverlay) els.hexChoiceOverlay.classList.add("hidden"); }
 
 function showResolution(text) {
-  if (els.resolutionOverlay) { els.resolutionText.textContent = text; els.resolutionOverlay.classList.add("show"); setTimeout(() => { els.resolutionOverlay.classList.remove("show"); }, 6000); }
+  if (els.resolutionOverlay) { els.resolutionText.textContent = text; els.resolutionOverlay.classList.remove("hidden"); setTimeout(() => { els.resolutionOverlay.classList.add("hidden"); }, 6000); }
 }
 
 function nextTurn() {
@@ -1195,10 +1197,10 @@ function render() {
 function renderHome() {
   const inRoom = Boolean(session.roomCode);
   const roomLoaded = Boolean(session.room);
-  els.stageLobby.hidden = inRoom && roomLoaded;
-  els.stageLobbyRoom.hidden = !inRoom || !roomLoaded || session.room.phase === "playing";
-  els.stageGameplay.hidden = !inRoom || session.room?.phase !== "playing" || !state.started;
-  els.stageLibrary.hidden = true;
+  els.stageLobby.classList.toggle("hidden", inRoom && roomLoaded);
+  els.stageLobbyRoom.classList.toggle("hidden", !inRoom || !roomLoaded || session.room.phase === "playing");
+  els.stageGameplay.classList.toggle("hidden", !inRoom || session.room?.phase !== "playing" || !state.started);
+  els.stageLibrary.classList.add("hidden");
 
   if (realtime.configured) {
     els.connectionStatus.innerHTML = `<span class="w-1 h-1 rounded-full bg-emerald-400"></span> 联机服务已连接`;
@@ -1212,10 +1214,10 @@ function renderHome() {
   els.menuCreateBtn.disabled = session.busy;
   els.menuJoinBtn.disabled = session.busy;
 
-  els.menuChoices.hidden = homeMode !== "menu";
-  els.homeFormPanel.hidden = homeMode === "menu";
-  els.createFields.hidden = homeMode !== "create";
-  els.joinFields.hidden = homeMode !== "join";
+  els.menuChoices.classList.toggle("hidden", homeMode !== "menu");
+  els.homeFormPanel.classList.toggle("hidden", homeMode === "menu");
+  els.createFields.classList.toggle("hidden", homeMode !== "create");
+  els.joinFields.classList.toggle("hidden", homeMode !== "join");
 
   if (homeMode === "create") { els.homeModeTitle.textContent = "创建房间"; }
   else if (homeMode === "join") { els.homeModeTitle.textContent = "加入房间"; }
@@ -1374,8 +1376,8 @@ function bindEvents() {
   if (els.eventBtn) els.eventBtn.addEventListener("click", triggerEvent);
   if (els.confirmEventBtn) els.confirmEventBtn.addEventListener("click", confirmEventTarget);
 
-  els.toggleLibraryBtn.addEventListener("click", () => { els.stageLibrary.hidden = false; });
-  if (els.closeLibraryBtn) els.closeLibraryBtn.addEventListener("click", () => { els.stageLibrary.hidden = true; });
+  els.toggleLibraryBtn.addEventListener("click", () => { els.stageLibrary.classList.remove("hidden"); });
+  if (els.closeLibraryBtn) els.closeLibraryBtn.addEventListener("click", () => { els.stageLibrary.classList.add("hidden"); });
 
   els.handCards.addEventListener("click", (e) => { const uid = e.target.closest("[data-use-card]")?.dataset.useCard; if (uid) useCard(uid); });
   els.activeList.addEventListener("click", (e) => { const payload = e.target.closest("[data-remove-active]")?.dataset.removeActive; if (!payload) return; const [pid, uid] = payload.split(":"); removeActiveCard(pid, uid); });
