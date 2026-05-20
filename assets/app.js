@@ -316,6 +316,24 @@ function normalizeSettings(s = {}) {
   };
 }
 
+function normalizeState() {
+  state.deck = Array.isArray(state.deck) ? state.deck : [];
+  state.discard = Array.isArray(state.discard) ? state.discard : [];
+  state.players = Array.isArray(state.players) ? state.players : [];
+  state.log = Array.isArray(state.log) ? state.log : [];
+  state.rules = Array.isArray(state.rules) ? state.rules : [];
+  state.countdownCards = Array.isArray(state.countdownCards) ? state.countdownCards : [];
+  state.hexChoices = Array.isArray(state.hexChoices) ? state.hexChoices : [];
+  state.currentEvent = state.currentEvent || null;
+  state.phase = state.phase || "normal";
+  state.round = state.round || 1;
+  state.currentIndex = state.currentIndex ?? 0;
+  state.selectedTargetId = state.selectedTargetId || "";
+  state.actionTaken = state.actionTaken || false;
+  state.started = state.started || false;
+  state.settings = state.settings || {};
+}
+
 function normalizeStatePlayers() {
   if (!state.players) return;
   state.players.forEach((p) => {
@@ -432,6 +450,7 @@ async function enterRoom(code) {
     session.room = room;
     session.isHost = room.hostId === session.clientId;
     state = room.game || createEmptyState();
+    normalizeState();
     normalizeStatePlayers();
     render();
   });
