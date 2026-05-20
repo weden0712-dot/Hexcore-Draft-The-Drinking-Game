@@ -126,6 +126,7 @@ const els = {
   logDrawer: document.querySelector("#logDrawer"),
   logList: document.querySelector("#logList"),
   clearLogBtn: document.querySelector("#clearLogBtn"),
+  toggleLogBtn: document.querySelector("#toggleLogBtn"),
   drawBtn: document.querySelector("#drawBtn"),
   drinkDrawBtn: document.querySelector("#drinkDrawBtn"),
   nextTurnBtn: document.querySelector("#nextTurnBtn"),
@@ -1404,6 +1405,7 @@ function bindEvents() {
   if (els.confirmEventBtn) els.confirmEventBtn.addEventListener("click", confirmEventTarget);
 
   els.toggleLibraryBtn.addEventListener("click", () => { els.stageLibrary.classList.remove("hidden"); });
+  if (els.toggleLogBtn) els.toggleLogBtn.addEventListener("click", () => { els.logDrawer.classList.toggle("translate-y-full"); });
   if (els.closeLibraryBtn) els.closeLibraryBtn.addEventListener("click", () => { els.stageLibrary.classList.add("hidden"); });
 
   els.handCards.addEventListener("click", (e) => { const uid = e.target.closest("[data-use-card]")?.dataset.useCard; if (uid) useCard(uid); });
