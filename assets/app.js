@@ -178,18 +178,18 @@ setTimeout(() => {
 
 async function initRealtime() {
   try {
+    console.log("[app.js] Initializing realtime client...");
     realtime = await createRealtimeClient();
+    console.log("[app.js] Realtime client created, configured:", realtime.configured, "uid:", realtime.uid);
     if (realtime.configured) {
       session.clientId = realtime.uid;
-      els.connectionStatus.textContent = "联机服务已连接";
-      els.connectionStatus.classList.add("ready");
     } else {
-      els.connectionStatus.textContent = "离线模式";
-      els.connectionStatus.classList.remove("ready");
+      console.warn("[app.js] Realtime client not configured");
     }
   } catch (error) {
+    console.error("[app.js] Failed to init realtime:", error);
     realtime = { configured: false, reason: `初始化失败：${error.message}` };
-    els.connectionStatus.textContent = "连接失败";
+    showToast(`联机服务初始化失败: ${error.message}`);
   }
   render();
 }
@@ -371,9 +371,11 @@ function getNickname() {
 }
 
 async function createRoomFlow() {
+  console.log("[app.js] createRoomFlow called");
   if (!ensureRealtime()) return;
   const name = getNickname();
   if (!name) return;
+  console.log("[app.js] Starting room creation with name:", name);
   setBusy(true);
   try {
     for (let attempt = 0; attempt < 6; attempt += 1) {
@@ -1389,7 +1391,12 @@ function bindEvents() {
 
 function createRoomPlayer(name, seat) { return { id: session.clientId, name, seat, online: true, joinedAt: Date.now(), lastSeen: Date.now() }; }
 function roomPlayers(room) { return Object.values(room?.players || {}).sort((a, b) => (a.seat ?? 0) - (b.seat ?? 0) || (a.joinedAt ?? 0) - (b.joinedAt ?? 0)); }
-function ensureRealtime() { if (realtime.configured) return true; showToast(realtime.reason || "联机服务未配置。"); return false; }
+function ensureRealtime() {
+  console.log("[app.js] ensureRealtime called, configured:", realtime.configured, "reason:", realtime.reason);
+  if (realtime.configured) return true;
+  showToast(realtime.reason || "联机服务未配置，请检查控制台日志。");
+  return false;
+}
 function ensureHost() { if (session.isHost) return true; showToast("只有房主可以操作。"); return false; }
 function setBusy(b) { session.busy = b; render(); }
 function generateRoomCode() { return String(Math.floor(100000 + Math.random() * 900000)); }
